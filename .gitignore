@@ -1,0 +1,6 @@
+# OSX spoecific gitignore file
+
+**/.DS_Store
+.DS_Store
+*.swp
+*~.nib
