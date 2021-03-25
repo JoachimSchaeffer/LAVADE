@@ -1,4 +1,4 @@
-# LAVADE
+# LAVADE: Latent Variable Demonstrator
 
 This repositoiry contains a demonstrator to build intuition on latent variable approaches and regression apporaches in general. 
 
