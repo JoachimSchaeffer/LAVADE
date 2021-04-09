@@ -4,7 +4,7 @@
 clc; clear all; close all;
 
 %% Initialize stuff
-nb_tests = 200; 
+nb_tests = 1000; 
 nb_workers = 4;
 
 %% Start the case studies
@@ -71,6 +71,9 @@ function results = case_study(nb_tests, nb_workers, case_name)
 
     r2_train_rr = [];
     r2_test_rr = [];
+    
+    r2_train_rr_a10 = [];
+    r2_test_rr_a10 = [];
 
     r2_train_en = [];
     r2_test_en = [];
@@ -78,7 +81,7 @@ function results = case_study(nb_tests, nb_workers, case_name)
 
     tic
 
-    parfor i = 1:nb_workers
+    for i = 1:nb_workers
         app = lavade_exported;
         
         if case_name == "DC"
@@ -300,6 +303,21 @@ function results = case_study(nb_tests, nb_workers, case_name)
         end
         r2_train_rr(i, :) = r2train_; 
         r2_test_rr(i,:) =  r2test_;
+        
+        if case_name == "NC"
+            app.RegularizationEditField.Value = 10;
+            
+            r2train_ = [];
+            r2test_ = [];
+            for j= 1:max_nloop
+                init(app)
+                r2test_(j) = app.r2_test; 
+                r2train_(j) = app.r2_train; 
+            end
+            r2_train_rr_a10(i, :) = r2train_; 
+            r2_test_rr_a10(i,:) =  r2test_;
+        end
+    
 
         % EN Section 
         app.MethodDropDown.Value = "EN";
@@ -364,6 +382,12 @@ function results = case_study(nb_tests, nb_workers, case_name)
 
     results.rr.r2train = reshape(r2_train_rr,1,numel(r2_train_rr));
     results.rr.r2test = reshape(r2_test_rr,1,numel(r2_test_rr)); 
+    
+    if case_name =="NC"
+        results.rr.r2train_a10 = reshape(r2_train_rr_a10,1,numel(r2_train_rr_a10));
+        results.rr.r2test_a10 = reshape(r2_test_rr_a10,1,numel(r2_test_rr_a10)); 
+    end
+    
 
     results.en.r2train = reshape(r2_train_en,1,numel(r2_train_en));
     results.en.r2test = reshape(r2_test_en,1,numel(r2_test_en)); 
@@ -373,12 +397,8 @@ function results = case_study(nb_tests, nb_workers, case_name)
     [results.stats.Mean_R2_Test('PLS1'),results.stats.Std_R2_Test('PLS1')] = stats(results.pls1.r2test);
     [results.stats.Mean_R2_Train('PLS2'),results.stats.Std_R2_Train('PLS2')] = stats(results.pls2.r2train);
     [results.stats.Mean_R2_Test('PLS2'),results.stats.Std_R2_Test('PLS2')] = stats(results.pls2.r2test);
-
-    [results.stats.Mean_R2_Train('PCR1'),results.stats.Std_R2_Train('PCR1')] = stats(results.pcr1.r2train);
-    [results.stats.Mean_R2_Test('PCR1'),results.stats.Std_R2_Test('PCR1')] = stats(results.pcr1.r2test);
-    [results.stats.Mean_R2_Train('PCR2'),results.stats.Std_R2_Train('PCR2')] = stats(results.pcr2.r2train);
-    [results.stats.Mean_R2_Test('PCR2'),results.stats.Std_R2_Test('PCR2')] = stats(results.pcr2.r2test);
     
+        
     if case_name == "NC"
         [results.stats.Mean_R2_Train('PLS3'),results.stats.Std_R2_Train('PLS3')] = stats(results.pls3.r2train);
         [results.stats.Mean_R2_Test('PLS3'),results.stats.Std_R2_Test('PLS3')] = stats(results.pls3.r2test);
@@ -388,7 +408,14 @@ function results = case_study(nb_tests, nb_workers, case_name)
         [results.stats.Mean_R2_Test('PLS5'),results.stats.Std_R2_Test('PLS5')] = stats(results.pls5.r2test);
         [results.stats.Mean_R2_Train('PLS20'),results.stats.Std_R2_Train('PLS20')] = stats(results.pls20.r2train);
         [results.stats.Mean_R2_Test('PLS20'),results.stats.Std_R2_Test('PLS20')] = stats(results.pls20.r2test);
-        
+    end
+
+    [results.stats.Mean_R2_Train('PCR1'),results.stats.Std_R2_Train('PCR1')] = stats(results.pcr1.r2train);
+    [results.stats.Mean_R2_Test('PCR1'),results.stats.Std_R2_Test('PCR1')] = stats(results.pcr1.r2test);
+    [results.stats.Mean_R2_Train('PCR2'),results.stats.Std_R2_Train('PCR2')] = stats(results.pcr2.r2train);
+    [results.stats.Mean_R2_Test('PCR2'),results.stats.Std_R2_Test('PCR2')] = stats(results.pcr2.r2test);
+
+    if case_name == "NC"
         [results.stats.Mean_R2_Train('PCR3'),results.stats.Std_R2_Train('PCR3')] = stats(results.pcr3.r2train);
         [results.stats.Mean_R2_Test('PCR3'),results.stats.Std_R2_Test('PCR3')] = stats(results.pcr3.r2test);
         [results.stats.Mean_R2_Train('PCR4'),results.stats.Std_R2_Train('PCR4')] = stats(results.pcr4.r2train);
@@ -408,6 +435,12 @@ function results = case_study(nb_tests, nb_workers, case_name)
 
     [results.stats.Mean_R2_Train('RR'),results.stats.Std_R2_Train('RR')] = stats(results.rr.r2train);
     [results.stats.Mean_R2_Test('RR'),results.stats.Std_R2_Test('RR')] = stats(results.rr.r2test);
+    
+    if case_name == "NC"
+        [results.stats.Mean_R2_Train('RR10'),results.stats.Std_R2_Train('RR10')] = stats(results.rr.r2train_a10);
+        [results.stats.Mean_R2_Test('RR10'),results.stats.Std_R2_Test('RR10')] = stats(results.rr.r2test_a10);
+    end
+    
 
     [results.stats.Mean_R2_Train('EN'),results.stats.Std_R2_Train('EN')] = stats(results.en.r2train);
     [results.stats.Mean_R2_Test('EN'),results.stats.Std_R2_Test('EN')] = stats(results.en.r2test);
@@ -419,3 +452,26 @@ function [mean_,std_] = stats(vector)
         mean_ = mean(vector); 
         std_ = std(vector);
 end
+
+
+
+%{
+% Now use this table as input in our input struct:
+input.data = T;
+
+% Set the row format of the data values (in this example we want to use
+% integers only):
+input.dataFormat = {'%i'};
+
+% Column alignment ('l'=left-justified, 'c'=centered,'r'=right-justified):
+input.tableColumnAlignment = 'c';
+
+% Switch table borders on/off:
+input.tableBorders = 1;
+
+% Switch to generate a complete LaTex document or just a table:
+input.makeCompleteLatexDocument = 1;
+
+% Now call the function to generate LaTex code:
+latex = latexTable(input);
+%} 
