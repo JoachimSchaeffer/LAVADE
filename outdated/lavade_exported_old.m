@@ -1,4 +1,4 @@
-classdef lavade_exported < matlab.apps.AppBase
+classdef lavade_exported_old < matlab.apps.AppBase
 
     % Properties that correspond to app components
     properties (Access = public)
@@ -76,11 +76,7 @@ classdef lavade_exported < matlab.apps.AppBase
         X_test; 
         y;
         y_train;
-        y_pred_train;
         y_test;
-        y_pred_test;
-        % coefficients
-        coeff;
         % individual sections of X
         rand_uc_l;       %  random UnCorrrelated section Left
         rand_uc_r;       %  random UnCorrrelated section Right
@@ -106,7 +102,6 @@ classdef lavade_exported < matlab.apps.AppBase
         ax2;
         rank_text;       % Text for displaying the rank in ax1
         const_term_text; % Text for the constant term in ax2 
-        
     end
     
     % Changed access to public to be able to run my case studies
@@ -163,14 +158,10 @@ classdef lavade_exported < matlab.apps.AppBase
             % that case we don't want to draw new samples. 
             create_signal(app);
         end
-    
+        
         function init_light(app)
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            % Function intended to use only when class is exported for
-            % monte carlo experiments
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            latent_variable_methods(app);
-            % plot_figures(app);
+            [y_pred, y_pred_train, coeff] = latent_variable_methods(app, app.X_train, app.X_test, app.y_train);
+            plot_figures(app, app.y_test, y_pred, y_pred_train, coeff);
         end
     
         function [r2, rss, rmse] = fit_stats(~, y, yfit)
@@ -398,13 +389,13 @@ classdef lavade_exported < matlab.apps.AppBase
             app.ComponentsEditField.Limits = [1 size(app.X_train,1)-1];
             
             % Apply the latent varibel method 
-            latent_variable_methods(app);
+            [y_pred, y_pred_train, coeff] = latent_variable_methods(app, app.X_train, app.X_test, app.y_train);
             
             % Plot everything
-            plot_figures(app);
+            plot_figures(app, app.y_test, y_pred, y_pred_train, coeff);
         end
         
-        function latent_variable_methods(app)
+        function [y_pred, y_pred_train, coeff] = latent_variable_methods(app, X_train, X_test, y_train)
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % This function is the core of the software tool and performs
             % the (latent) variable regressions
@@ -412,12 +403,12 @@ classdef lavade_exported < matlab.apps.AppBase
             % Ridge Regression (RR), LASSO and Elastic Net (EN)
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
-            r_xt = size(app.X_test, 1);
-            r_xtr = size(app.X_train, 1);
+            r_xt = size(X_test, 1);
+            r_xtr = size(X_train, 1);
             
             if app.StandardizeInputsCheckBox.Value == true
-                [app.X_train, mx, stdx] = normalize_train(app, app.X_train);
-                app.X_test = normalize_test(app, app.X_test, mx, stdx);
+                [X_train, mx, stdx] = normalize_train(app, X_train);
+                X_test = normalize_test(app, X_test, mx, stdx);
                 app.X_std = normalize_test(app, app.X, mx, stdx);
             end
             
@@ -428,26 +419,26 @@ classdef lavade_exported < matlab.apps.AppBase
             % projected data
             if strcmp(app.MethodDropDown.Value, 'CCA')
                 visibility(app, 'CCA');
-                [A,B,r,U,V,stats] = canoncorr(app.X_train, app.y_train);
+                [A,B,r,U,V,stats] = canoncorr(X_train, y_train);
                 %[A, B, ~, ~, ~, ~] = canoncorr(X_train, y_train);
-                app.coeff = A/B;
+                coeff = A/B;
                 const_tr = ones(r_xtr, 1);
-                X_train_ = [const_tr, app.X_train*app.coeff];
-                b = regress(app.y_train-mean(app.y_train), X_train_); 
+                X_train_ = [const_tr, X_train*coeff];
+                b = regress(y_train-mean(y_train), X_train_); 
                 const_t = ones(r_xt, 1);
-                app.y_pred_test = [const_t, app.X_test*app.coeff]*b + mean(app.y_train);
-                app.y_pred_train = X_train_*b + mean(app.y_train);
+                y_pred = [const_t, X_test*coeff]*b + mean(y_train);
+                y_pred_train = X_train_*b + mean(y_train);
                 
             % PLS regression based on the matlab implementation of PLS   
             elseif strcmp(app.MethodDropDown.Value, 'PLS')
                 visibility(app, 'PLS');
                 ncomp = int64(app.ComponentsEditField.Value);
                 % [XL,YL,XS,YS,BETA,PCTVAR,MSE,stats] = plsregress(X_train, y_train, ncomp);
-                [~, ~, ~, ~, BETA, ~, ~, ~] = plsregress(app.X_train, app.y_train, ncomp);
-                app.coeff = BETA;
+                [~, ~, ~, ~, BETA, ~, ~, ~] = plsregress(X_train, y_train, ncomp);
+                coeff = BETA;
                 const = ones(r_xt, 1);
-                app.y_pred_test = [const, app.X_test]*BETA;
-                app.y_pred_train = [ones(r_xtr, 1), app.X_train]*BETA;
+                y_pred = [const, X_test]*BETA;
+                y_pred_train = [ones(r_xtr, 1), X_train]*BETA;
             
             % PCA + Regression: The data is first projected onto the
             % #component proncipal component direction. Subsequently
@@ -455,14 +446,14 @@ classdef lavade_exported < matlab.apps.AppBase
             elseif strcmp(app.MethodDropDown.Value, 'PCR')
                 visibility(app, 'PCR');
                 % [PCALoadings, PCAScores, PCAVar] = pca(X_train,'Economy',false);
-                [PCALoadings, PCAScores, ~] = pca(app.X_train,'Economy',false);
+                [PCALoadings, PCAScores, ~] = pca(X_train,'Economy',false);
                 ncomp = int64(app.ComponentsEditField.Value);
-                betaPCR = regress(app.y_train-mean(app.y_train), PCAScores(:,1:ncomp));
+                betaPCR = regress(y_train-mean(y_train), PCAScores(:,1:ncomp));
                 betaPCR = PCALoadings(:,1:ncomp)*betaPCR;
-                betaPCR = [mean(app.y_train) - mean(app.X_train)*betaPCR; betaPCR];
-                app.coeff = betaPCR;
-                app.y_pred_test = [ones(r_xt,1) app.X_test]*betaPCR;
-                app.y_pred_train = [ones(r_xtr,1) app.X_train]*betaPCR;
+                betaPCR = [mean(y_train) - mean(X_train)*betaPCR; betaPCR];
+                coeff = betaPCR;
+                y_pred = [ones(r_xt,1) X_test]*betaPCR;
+                y_pred_train = [ones(r_xtr,1) X_train]*betaPCR;
             
             % Ridge Regression, Least Square Regression with L2-norm
             % penalty on the weights
@@ -475,20 +466,20 @@ classdef lavade_exported < matlab.apps.AppBase
                 % y_pred = B(1) + X_test*B(2:end);
                 % y_pred_train = B(1) + X_train*B(2:end);
                 
-                B = ridge_regression(app, app.y_train,app.X_train,k);
-                app.y_pred_test = app.X_test*B;
-                app.y_pred_train = app.X_train*B;
-                app.coeff = B;
+                B = ridge_regression(app, y_train,X_train,k);
+                y_pred = X_test*B;
+                y_pred_train = X_train*B;
+                coeff = B;
                 
             % LASSO, Least Square Regression with L1-norm
             % penalty on the weights   
             elseif strcmp(app.MethodDropDown.Value, 'LASSO')
                 visibility(app, 'LASSO');
                 k = app.RegularizationEditField.Value;
-                [B,FitInfo] = lasso(app.X_train, app.y_train, 'Lambda', k, 'Standardize',false);
-                app.y_pred_test = app.X_test*B + FitInfo.Intercept;
-                app.y_pred_train = app.X_train*B + FitInfo.Intercept;
-                app.coeff = B;
+                [B,FitInfo] = lasso(X_train, y_train, 'Lambda', k, 'Standardize',false);
+                y_pred = X_test*B + FitInfo.Intercept;
+                y_pred_train = X_train*B + FitInfo.Intercept;
+                coeff = B;
                 
             % Elastic Net, weighted combination of L1 & L2 Norm penalty on
             % the weigts. 
@@ -496,19 +487,15 @@ classdef lavade_exported < matlab.apps.AppBase
                 visibility(app, 'EN');
                 k = app.RegularizationEditField.Value;
                 alpha = app.ENAlphaSlider.Value;
-                [B,FitInfo] = lasso(app.X_train, app.y_train, 'Lambda', k, 'Alpha', alpha, 'Standardize', false);
-                app.y_pred_test = app.X_test*B + FitInfo.Intercept;
-                app.y_pred_train = app.X_train*B + FitInfo.Intercept;
-                app.coeff = B;
+                [B,FitInfo] = lasso(X_train, y_train, 'Lambda', k, 'Alpha', alpha, 'Standardize', false);
+                y_pred = X_test*B + FitInfo.Intercept;
+                y_pred_train = X_train*B + FitInfo.Intercept;
+                coeff = B;
 
             end
-            [app.r2_train, app.rss_train, app.rmse_train] = fit_stats(app, app.y_pred_train, app.y_train);
-            [app.r2_test, app.rss_test, app.rmse_test] = fit_stats(app, app.y_pred_test, app.y_test);
-            % Save stats in a single variable
-            app.stats = [app.r2_train, app.rss_train, app.rmse_train, app.r2_test, app.rss_test, app.rmse_test];
         end
         
-        function plot_figures(app)
+        function plot_figures(app, y_test, y_pred, y_pred_train, coeff)
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % This function plots the data, regression coefficients
             % as well as the regression on the train and test data
@@ -565,16 +552,16 @@ classdef lavade_exported < matlab.apps.AppBase
             app.ax2.YGrid = 'on';
 
             % Distinguish the case in which the model has a constant term
-            if length(app.coeff) == size(app.X, 2)
+            if length(coeff) == size(app.X, 2)
                 % Model doesn't have a constant term
-                plot(app.ax2, app.coeff);
+                plot(app.ax2, coeff);
                 t = sprintf('c = %.2f', 0);
-                y_pos = app.ax2.YLim(2)-0.2*(app.ax2.YLim(2)-app.ax2.YLim(1));
+                y_pos = app.ax2.YLim(2)-0.1*(app.ax2.YLim(2)-app.ax2.YLim(1));
             else
                 % Model has a constant term
-                plot(app.ax2, app.coeff(2:end));
-                t = sprintf('c = %.2f', app.coeff(1));
-                y_pos = app.ax2.YLim(2)-0.2*(app.ax2.YLim(2)-app.ax2.YLim(1));
+                plot(app.ax2, coeff(2:end));
+                t = sprintf('c = %.2f', coeff(1));
+                y_pos = app.ax2.YLim(2)-0.1*(app.ax2.YLim(2)-app.ax2.YLim(1));
             end
 
             %text = text(app.ax2, 2, y_pos, t, 'FontSize', 15);
@@ -587,29 +574,33 @@ classdef lavade_exported < matlab.apps.AppBase
             
             % Regression Plots
             % Train 
-            line = linspace(min(min(app.y_train), min(app.y_pred_train)), max(max(app.y_train), max(app.y_pred_train)), 10);
+            line = linspace(min(min(app.y_train), min(y_pred_train)), max(max(app.y_train), max(y_pred_train)), 10);
             plot(app.UIAxesRegTrain, line, line)
             
-            scatter(app.UIAxesRegTrain, app.y_pred_train, app.y_train);
+            scatter(app.UIAxesRegTrain, y_pred_train, app.y_train);
             axis(app.UIAxesRegTrain, 'equal');
             
+            [app.r2_train, app.rss_train, app.rmse_train] = fit_stats(app, y_pred_train, app.y_train);
             text_train = sprintf('R^2 = %.2f', app.r2_train);
             y_pos_train = app.UIAxesRegTrain.YLim(2)-0.15*(app.UIAxesRegTrain.YLim(2)-app.UIAxesRegTrain.YLim(1));
             x_pos_train = app.UIAxesRegTrain.XLim(1)+0.08*(app.UIAxesRegTrain.XLim(2)-app.UIAxesRegTrain.XLim(1));
             text(app.UIAxesRegTrain, x_pos_train, y_pos_train, text_train, 'FontSize', 15);
             
             % Test
-            line = linspace(min(min(app.y_test), min(app.y_pred_test)), max(max(app.y_test), max(app.y_pred_test)), 10);
+            line = linspace(min(min(y_test), min(y_pred)), max(max(y_test), max(y_pred)), 10);
             plot(app.UIAxesReg, line, line)
             
-            scatter(app.UIAxesReg, app.y_pred_test, app.y_test);
+            scatter(app.UIAxesReg, y_pred, y_test);
             axis(app.UIAxesReg, 'equal');
             
+            [app.r2_test, app.rss_test, app.rmse_test] = fit_stats(app, y_pred, y_test);
             text_test = sprintf('R^2 = %.2f', app.r2_test);
             y_pos_test = app.UIAxesReg.YLim(2)-0.15*(app.UIAxesReg.YLim(2)-app.UIAxesReg.YLim(1));
             x_pos_test = app.UIAxesReg.XLim(1)+0.08*(app.UIAxesReg.XLim(2)-app.UIAxesReg.XLim(1));
             text(app.UIAxesReg, x_pos_test, y_pos_test, text_test, 'FontSize', 15);
-             
+            
+            % Save stats in a single variable
+            app.stats = [app.r2_train, app.rss_train, app.rmse_train, app.r2_test, app.rss_test, app.rmse_test]; 
             % Axes could be linked, but I dont think it's necessary.
             % There is still a bug in the line below. 
             % linkaxes([app.UIAxesReg app.UIAxesRegTrain],'xy');
@@ -629,8 +620,8 @@ classdef lavade_exported < matlab.apps.AppBase
         % MethodDropDown, RegularizationEditField, 
         % StandardizeInputsCheckBox, UpdatePlotsButton
         function UpdatePlotsButtonPushed2(app, event)
-            latent_variable_methods(app);
-            plot_figures(app);
+            [y_pred, y_pred_train, coeff] = latent_variable_methods(app, app.X_train, app.X_test, app.y_train);
+            plot_figures(app, app.y_test, y_pred, y_pred_train, coeff);
         end
 
         % Callback function: DatapointsEditField, 
@@ -647,8 +638,8 @@ classdef lavade_exported < matlab.apps.AppBase
         % SignalSlider, TrainTestSplitSlider
         function SNRleftSliderValueChanged(app, event)
             create_signal(app); 
-            latent_variable_methods(app);
-            plot_figures(app);
+            [y_pred, y_pred_train, coeff] = latent_variable_methods(app, app.X_train, app.X_test, app.y_train);
+            plot_figures(app, app.y_test, y_pred, y_pred_train, coeff);
         end
     end
 

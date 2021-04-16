@@ -2,88 +2,76 @@
 
 %% Clean up!
 clc; clear all; close all;
-
+warning('off')
 %% Initialize stuff
 nb_tests = 1000; 
-nb_workers = 4;
 
 %% Start the case studies
-%% Default case
+Case_study.DC = case_study(nb_tests, "DC");
+Case_study.DSC = case_study(nb_tests, "DSC");
+Case_study.NC = case_study(nb_tests, "NC");
 
 
+%% Printing of Latex Table in the console 
+input.dataFormat = {'%.3f'};
+input.tableBorders = 0;
+latexDC = 1;
+latexDSC = 1;
+latexNC = 1;
 
-%% These variables seem to be necessary for parallelization. 
-% Let me know in case there's a smarter way to solve that issue! 
-% MATLAB seem to 'baby' the used a lot and I didn't find a way to pass more
-% low level instrutions to the workers. 
-
-Case_study.DC = case_study(nb_tests, nb_workers, "DC");
-Case_study.DSC = case_study(nb_tests, nb_workers, "DSC");
-Case_study.NC = case_study(nb_tests, nb_workers, "NC");
-
-
-
-function results = case_study(nb_tests, nb_workers, case_name)
-    tic
-    max_nloop = int64(nb_tests/nb_workers);
+if latexDC==1
+    input.data = [Case_study.DC.results{:,2},Case_study.DC.results{:,8}, Case_study.DC.results{:,5}, Case_study.DC.results{:,11}];
+    input.tableColLabels = {'$\mu (RSS_{Train})$', '$\sigma RSS_{Train}$', '$\mu RSS_{Test}$', '$\sigma RSS_{Test}$'};
+    input.tableRowLabels = {'PLS (1)','PLS (2)','PCR (1)','PCR (2)', 'LASSO', 'RR', 'EN'};
+    latexTable(input);
     
-    if case_name == "..."
-        RowNames = {'PLS1', 'PLS2', 'PLS3','PLS4','PLS5','PLS20'...
+    input.data = [Case_study.DC.results{:,3},Case_study.DC.results{:,9}, Case_study.DC.results{:,6}, Case_study.DC.results{:,12}];
+    input.tableColLabels = {'$\mu (RMSE_{Train})$', '$\sigma RMSE_{Train}$', '$\mu RMSE_{Test}$', '$\sigma RMSE_{Test}$'};
+    latexTable(input);
+end
+
+if latexDSC==1
+    input.data = [Case_study.DSC.results{:,2},Case_study.DSC.results{:,8}, Case_study.DSC.results{:,5}, Case_study.DSC.results{:,11}];
+    input.tableColLabels = {'$\mu (RSS_{Train})$', '$\sigma RSS_{Train}$', '$\mu RSS_{Test}$', '$\sigma RSS_{Test}$'};
+    input.tableRowLabels = {'PLS (1)','PLS (2)','PCR (1)','PCR (2)', 'LASSO', 'RR', 'EN'};
+    latexTable(input);
+    
+    
+    input.data = [Case_study.DSC.results{:,3},Case_study.DSC.results{:,9}, Case_study.DSC.results{:,6}, Case_study.DSC.results{:,12}];
+    input.tableColLabels = {'$\mu (RMSE_{Train})$', '$\sigma RMSE_{Train}$', '$\mu RMSE_{Test}$', '$\sigma RMSE_{Test}$'};
+    latexTable(input);
+end
+
+if latexNC==1
+    input.data = [Case_study.NC.results{:,2},Case_study.NC.results{:,8}, Case_study.NC.results{:,5}, Case_study.NC.results{:,11}];
+    input.tableColLabels = {'$\mu (RSS_{Train})$', '$\sigma RSS_{Train}$', '$\mu RSS_{Test}$', '$\sigma RSS_{Test}$'};
+    input.tableRowLabels = {'PLS (1)','PLS (2)','PLS (3)','PLS (4)','PLS (5)','PLS (20)', ...
+        'PCR (1)','PCR (2)','PCR (3)','PCR (4)','PCR (5)','PCR (20)', ...
+        'RR ($\alpha = 0.001$)','RR10 ($\alpha = 10$)','LASSO', 'EN'};
+    latexTable(input);
+    
+    input.data = [Case_study.NC.results{:,3},Case_study.NC.results{:,9}, Case_study.NC.results{:,6}, Case_study.NC.results{:,12}];
+    input.tableColLabels = {'$\mu (RMSE_{Train})$', '$\sigma RMSE_{Train}$', '$\mu RMSE_{Test}$', '$\sigma RMSE_{Test}$'};
+    latexTable(input);
+end
+
+
+%% Functions 
+
+function stats = case_study(nb_tests, case_name)
+    max_nloop = nb_tests;
+    
+    % section still under development
+    RowNames = {'PLS1', 'PLS2', 'PLS3','PLS4','PLS5','PLS20'...
             'PCR1','PCR2','PCR3','PCR4','PCR5','PCR20'};
-        VariableNames = {'R2_Train', 'R2_Test'};
-        r2_table = cell2table(cell(12,2), 'VariableNames', VariableNames,...
+    VariableNames = {'R2_Train', 'R2_Test'};
+    r2_table = cell2table(cell(12,2), 'VariableNames', VariableNames,...
             'RowNames', RowNames);
-    else 
-        r2_train_pls1 = [];
-        r2_test_pls1 = [];
-        r2_train_pls2 = [];
-        r2_test_pls2 = [];
-        r2_train_pls3 = [];
-        r2_test_pls3 = [];
-        r2_train_pls4 = [];
-        r2_test_pls4 = [];
-        r2_train_pls5 = [];
-        r2_test_pls5 = [];
-        r2_train_pls20 = [];
-        r2_test_pls20 = [];
-
-        r2_train_pcr1 = [];
-        r2_test_pcr1 = [];
-        r2_train_pcr2 = [];
-        r2_test_pcr2 = [];
-        
-        r2_train_pcr3 = [];
-        r2_test_pcr3 = [];
-        r2_train_pcr4 = [];
-        r2_test_pcr4 = [];
-        r2_train_pcr5 = [];
-        r2_test_pcr5 = [];
-        r2_train_pcr20 = [];
-        r2_test_pcr20 = [];
-    end
     
-
-    r2_train_cca = [];
-    r2_test_cca = [];
-
-    r2_train_lasso = [];
-    r2_test_lasso = [];
-
-    r2_train_rr = [];
-    r2_test_rr = [];
+    app = lavade_exported;
     
-    r2_train_rr_a10 = [];
-    r2_test_rr_a10 = [];
-
-    r2_train_en = [];
-    r2_test_en = [];
-
-
-    tic
-
-    for i = 1:nb_workers
-        app = lavade_exported;
-        
+    for i = 1:max_nloop
+        init(app)
         if case_name == "DC"
         elseif case_name == "DSC"
             app.StandardizeInputsCheckBox.Value = true;
@@ -100,355 +88,122 @@ function results = case_study(nb_tests, nb_workers, case_name)
 
         % PLS Section 
         app.MethodDropDown.Value = "PLS";
+        
         app.ComponentsEditField.Value = 1;
-
-        r2train_ = [];
-        r2test_ = [];
-        for j= 1:max_nloop
-            init(app)
-            r2test_(j) = app.r2_test; 
-            r2train_(j) = app.r2_train; 
-        end
-        r2_train_pls1(i, :) = r2train_; 
-        r2_test_pls1(i,:) =  r2test_;
-
+        init(app)
+        stats.pls1(i,:) = app.stats; 
 
         app.ComponentsEditField.Value = 2;
-
-        r2train_ = [];
-        r2test_ = [];
-        for j= 1:max_nloop
-            init(app)
-            r2test_(j) = app.r2_test; 
-            r2train_(j) = app.r2_train; 
-        end
-        r2_train_pls2(i, :) = r2train_; 
-        r2_test_pls2(i,:) =  r2test_;
+        init(app)
+        stats.pls2(i,:) = app.stats; 
         
         % Noisy case needs more details
         if case_name == "NC"
            
             app.ComponentsEditField.Value = 3;
-
-            r2train_ = [];
-            r2test_ = [];
-            for j= 1:max_nloop
-                init(app)
-                r2test_(j) = app.r2_test; 
-                r2train_(j) = app.r2_train; 
-            end
-            r2_train_pls3(i, :) = r2train_; 
-            r2_test_pls3(i,:) =  r2test_;
-
+            init(app)
+            stats.pls3(i,:) = app.stats;  
 
             app.ComponentsEditField.Value = 4;
-
-            r2train_ = [];
-            r2test_ = [];
-            for j= 1:max_nloop
-                init(app)
-                r2test_(j) = app.r2_test; 
-                r2train_(j) = app.r2_train; 
-            end
-            r2_train_pls4(i, :) = r2train_; 
-            r2_test_pls4(i,:) =  r2test_;
+            init(app)
+            stats.pls4(i,:) = app.stats; 
 
             app.ComponentsEditField.Value = 5;
-
-            r2train_ = [];
-            r2test_ = [];
-            for j= 1:max_nloop
-                init(app)
-                r2test_(j) = app.r2_test; 
-                r2train_(j) = app.r2_train; 
-            end
-            r2_train_pls5(i, :) = r2train_; 
-            r2_test_pls5(i,:) =  r2test_;
-
+            init(app)
+            stats.pls5(i,:) = app.stats; 
 
             app.ComponentsEditField.Value = 20;
-
-            r2train_ = [];
-            r2test_ = [];
-            for j= 1:max_nloop
-                init(app)
-                r2test_(j) = app.r2_test; 
-                r2train_(j) = app.r2_train; 
-            end
-            r2_train_pls20(i, :) = r2train_; 
-            r2_test_pls20(i,:) =  r2test_;
+            init(app)
+            stats.pls20(i,:) = app.stats; 
 
         end
             
-
-
         % PCR Section 
         app.MethodDropDown.Value = "PCR";
         app.ComponentsEditField.Value = 1;
-
-        r2train_ = [];
-        r2test_ = [];
-        for j= 1:max_nloop
-            init(app)
-            r2test_(j) = app.r2_test; 
-            r2train_(j) = app.r2_train; 
-        end
-        r2_train_pcr1(i, :) = r2train_; 
-        r2_test_pcr1(i,:) =  r2test_;
-
+        init(app)
+        stats.pcr1(i,:) = app.stats; 
 
         app.ComponentsEditField.Value = 2;
-
-        r2train_ = [];
-        r2test_ = [];
-        for j= 1:max_nloop
-            init(app)
-            r2test_(j) = app.r2_test; 
-            r2train_(j) = app.r2_train; 
-        end
-        r2_train_pcr2(i, :) = r2train_; 
-        r2_test_pcr2(i,:) =  r2test_;
-
+        init(app)
+        stats.pcr2(i,:) = app.stats; 
+        
         % Noisy case needs more details
         if case_name == "NC"
            
             app.ComponentsEditField.Value = 3;
-
-            r2train_ = [];
-            r2test_ = [];
-            for j= 1:max_nloop
-                init(app)
-                r2test_(j) = app.r2_test; 
-                r2train_(j) = app.r2_train; 
-            end
-            r2_train_pcr3(i, :) = r2train_; 
-            r2_test_pcr3(i,:) =  r2test_;
-
+            init(app)
+            stats.pcr3(i,:) = app.stats; 
 
             app.ComponentsEditField.Value = 4;
-
-            r2train_ = [];
-            r2test_ = [];
-            for j= 1:max_nloop
-                init(app)
-                r2test_(j) = app.r2_test; 
-                r2train_(j) = app.r2_train; 
-            end
-            r2_train_pcr4(i, :) = r2train_; 
-            r2_test_pcr4(i,:) =  r2test_;
+            init(app)
+            stats.pcr4(i,:) = app.stats; 
 
             app.ComponentsEditField.Value = 5;
-
-            r2train_ = [];
-            r2test_ = [];
-            for j= 1:max_nloop
-                init(app)
-                r2test_(j) = app.r2_test; 
-                r2train_(j) = app.r2_train; 
-            end
-            r2_train_pcr5(i, :) = r2train_; 
-            r2_test_pcr5(i,:) =  r2test_;
-
+            init(app)
+            stats.pcr5(i,:) = app.stats; 
 
             app.ComponentsEditField.Value = 20;
-
-            r2train_ = [];
-            r2test_ = [];
-            for j= 1:max_nloop
-                init(app)
-                r2test_(j) = app.r2_test; 
-                r2train_(j) = app.r2_train; 
-            end
-            r2_train_pcr20(i, :) = r2train_; 
-            r2_test_pcr20(i,:) =  r2test_;
-
-        end
-
-        % CCA Section 
-        app.MethodDropDown.Value = "CCA";
-
-        r2train_ = [];
-        r2test_ = [];
-        for j= 1:max_nloop
             init(app)
-            r2test_(j) = app.r2_test; 
-            r2train_(j) = app.r2_train; 
+            stats.pcr20(i,:) = app.stats; 
+
         end
-        r2_train_cca(i, :) = r2train_; 
-        r2_test_cca(i,:) =  r2test_;
-
-
+        
         % LASSO Section 
         app.MethodDropDown.Value = "LASSO";
-
-        r2train_ = [];
-        r2test_ = [];
-        for j= 1:max_nloop
-            init(app)
-            r2test_(j) = app.r2_test; 
-            r2train_(j) = app.r2_train; 
-        end
-        r2_train_lasso(i, :) = r2train_; 
-        r2_test_lasso(i,:) =  r2test_;
+        app.RegularizationEditField.Value = 0.001;
+        init(app)
+        stats.lasso(i,:) = app.stats; 
 
         % RR Section 
         app.MethodDropDown.Value = "RR";
-
-        r2train_ = [];
-        r2test_ = [];
-        for j= 1:max_nloop
-            init(app)
-            r2test_(j) = app.r2_test; 
-            r2train_(j) = app.r2_train; 
-        end
-        r2_train_rr(i, :) = r2train_; 
-        r2_test_rr(i,:) =  r2test_;
+        app.RegularizationEditField.Value = 0.001;
+        init(app)
+        stats.rrd(i,:) = app.stats; 
         
         if case_name == "NC"
             app.RegularizationEditField.Value = 10;
-            
-            r2train_ = [];
-            r2test_ = [];
-            for j= 1:max_nloop
-                init(app)
-                r2test_(j) = app.r2_test; 
-                r2train_(j) = app.r2_train; 
-            end
-            r2_train_rr_a10(i, :) = r2train_; 
-            r2_test_rr_a10(i,:) =  r2test_;
+            init(app)
+            stats.rr10(i,:) = app.stats; 
         end
-    
 
         % EN Section 
         app.MethodDropDown.Value = "EN";
-
-        r2train_ = [];
-        r2test_ = [];
-        for j= 1:max_nloop
-            init(app)
-            r2test_(j) = app.r2_test; 
-            r2train_(j) = app.r2_train; 
+        app.RegularizationEditField.Value = 0.001;
+        init(app)
+        stats.EN(i,:) = app.stats; 
+        
+        % Print some stuff in the console
+        if mod(i,10)==0 
+            i
+            case_name
         end
-        r2_train_en(i, :) = r2train_; 
-        r2_test_en(i,:) =  r2test_;
-
+        
     end 
-
-    toc 
 
 
     %% Initialize and start filling results structure
-
-    results.stats  = cell2table(cell(0,4), 'VariableNames', {'Mean_R2_Train', ...
-        'Std_R2_Train', 'Mean_R2_Test', 'Std_R2_Test' });
-
-    results.pls1.r2train = reshape(r2_train_pls1,1,numel(r2_train_pls1));
-    results.pls1.r2test = reshape(r2_test_pls1,1,numel(r2_test_pls1)); 
-    results.pls2.r2train = reshape(r2_train_pls2,1,numel(r2_train_pls2));
-    results.pls2.r2test = reshape(r2_test_pls2,1,numel(r2_test_pls2)); 
+    Variable_names = {'Mean_R2_Train', 'Mean_RSS_Train', 'Mean_RMSE_Train', ...
+        'Mean_R2_Test', 'Mean_RSS_Test', 'Mean_RMSE_Test', ...
+        'Std_R2_Train', 'Std_RSS_Train', 'Std_RMSE_Train',...
+        'Std_R2_Test', 'Std_RSS_Test', 'Std_RMSE_Test'};
+    num_vars = 12;
+    stats.results  = cell2table(cell(0,num_vars), 'VariableNames', Variable_names);
     
-    if case_name =="NC"
-        results.pls3.r2train = reshape(r2_train_pls3,1,numel(r2_train_pls3));
-        results.pls3.r2test = reshape(r2_test_pls3,1,numel(r2_test_pls3)); 
-        results.pls4.r2train = reshape(r2_train_pls4,1,numel(r2_train_pls4));
-        results.pls4.r2test = reshape(r2_test_pls4,1,numel(r2_test_pls4)); 
-        results.pls5.r2train = reshape(r2_train_pls5,1,numel(r2_train_pls5));
-        results.pls5.r2test = reshape(r2_test_pls5,1,numel(r2_test_pls5)); 
-        results.pls20.r2train = reshape(r2_train_pls20,1,numel(r2_train_pls20));
-        results.pls20.r2test = reshape(r2_test_pls20,1,numel(r2_test_pls20)); 
+    fns = fieldnames(stats);
+    for i=1:length(fns)-1
+        [mean_, std_] = create_stats(stats.(fns{i}));
+        for j=1:int64(num_vars/2)
+            stats.results(fns{i},j) = {mean_(j)};
+            stats.results(fns{i},j+int64(num_vars/2)) = {std_(j)};
+        end 
     end
-
-    results.pcr1.r2train = reshape(r2_train_pcr1,1,numel(r2_train_pcr1));
-    results.pcr1.r2test = reshape(r2_test_pcr1,1,numel(r2_test_pcr1)); 
-    results.pcr2.r2train = reshape(r2_train_pcr2,1,numel(r2_train_pcr2));
-    results.pcr2.r2test = reshape(r2_test_pcr2,1,numel(r2_test_pcr2)); 
-
-    if case_name =="NC"
-        results.pcr3.r2train = reshape(r2_train_pcr3,1,numel(r2_train_pcr3));
-        results.pcr3.r2test = reshape(r2_test_pcr3,1,numel(r2_test_pcr3)); 
-        results.pcr4.r2train = reshape(r2_train_pcr4,1,numel(r2_train_pcr4));
-        results.pcr4.r2test = reshape(r2_test_pcr4,1,numel(r2_test_pcr4)); 
-        results.pcr5.r2train = reshape(r2_train_pcr5,1,numel(r2_train_pcr5));
-        results.pcr5.r2test = reshape(r2_test_pcr5,1,numel(r2_test_pcr5)); 
-        results.pcr20.r2train = reshape(r2_train_pcr20,1,numel(r2_train_pcr20));
-        results.pcr20.r2test = reshape(r2_test_pcr20,1,numel(r2_test_pcr20)); 
-    end
-    
-    results.cca.r2train = reshape(r2_train_cca,1,numel(r2_train_cca));
-    results.cca.r2test = reshape(r2_test_cca,1,numel(r2_test_cca)); 
-
-    results.lasso.r2train = reshape(r2_train_lasso,1,numel(r2_train_lasso));
-    results.lasso.r2test = reshape(r2_test_lasso,1,numel(r2_test_lasso)); 
-
-    results.rr.r2train = reshape(r2_train_rr,1,numel(r2_train_rr));
-    results.rr.r2test = reshape(r2_test_rr,1,numel(r2_test_rr)); 
-    
-    if case_name =="NC"
-        results.rr.r2train_a10 = reshape(r2_train_rr_a10,1,numel(r2_train_rr_a10));
-        results.rr.r2test_a10 = reshape(r2_test_rr_a10,1,numel(r2_test_rr_a10)); 
-    end
-    
-
-    results.en.r2train = reshape(r2_train_en,1,numel(r2_train_en));
-    results.en.r2test = reshape(r2_test_en,1,numel(r2_test_en)); 
-
-
-    [results.stats.Mean_R2_Train('PLS1'),results.stats.Std_R2_Train('PLS1')] = stats(results.pls1.r2train);
-    [results.stats.Mean_R2_Test('PLS1'),results.stats.Std_R2_Test('PLS1')] = stats(results.pls1.r2test);
-    [results.stats.Mean_R2_Train('PLS2'),results.stats.Std_R2_Train('PLS2')] = stats(results.pls2.r2train);
-    [results.stats.Mean_R2_Test('PLS2'),results.stats.Std_R2_Test('PLS2')] = stats(results.pls2.r2test);
-    
-        
-    if case_name == "NC"
-        [results.stats.Mean_R2_Train('PLS3'),results.stats.Std_R2_Train('PLS3')] = stats(results.pls3.r2train);
-        [results.stats.Mean_R2_Test('PLS3'),results.stats.Std_R2_Test('PLS3')] = stats(results.pls3.r2test);
-        [results.stats.Mean_R2_Train('PLS4'),results.stats.Std_R2_Train('PLS4')] = stats(results.pls4.r2train);
-        [results.stats.Mean_R2_Test('PLS4'),results.stats.Std_R2_Test('PLS4')] = stats(results.pls4.r2test);
-        [results.stats.Mean_R2_Train('PLS5'),results.stats.Std_R2_Train('PLS5')] = stats(results.pls5.r2train);
-        [results.stats.Mean_R2_Test('PLS5'),results.stats.Std_R2_Test('PLS5')] = stats(results.pls5.r2test);
-        [results.stats.Mean_R2_Train('PLS20'),results.stats.Std_R2_Train('PLS20')] = stats(results.pls20.r2train);
-        [results.stats.Mean_R2_Test('PLS20'),results.stats.Std_R2_Test('PLS20')] = stats(results.pls20.r2test);
-    end
-
-    [results.stats.Mean_R2_Train('PCR1'),results.stats.Std_R2_Train('PCR1')] = stats(results.pcr1.r2train);
-    [results.stats.Mean_R2_Test('PCR1'),results.stats.Std_R2_Test('PCR1')] = stats(results.pcr1.r2test);
-    [results.stats.Mean_R2_Train('PCR2'),results.stats.Std_R2_Train('PCR2')] = stats(results.pcr2.r2train);
-    [results.stats.Mean_R2_Test('PCR2'),results.stats.Std_R2_Test('PCR2')] = stats(results.pcr2.r2test);
-
-    if case_name == "NC"
-        [results.stats.Mean_R2_Train('PCR3'),results.stats.Std_R2_Train('PCR3')] = stats(results.pcr3.r2train);
-        [results.stats.Mean_R2_Test('PCR3'),results.stats.Std_R2_Test('PCR3')] = stats(results.pcr3.r2test);
-        [results.stats.Mean_R2_Train('PCR4'),results.stats.Std_R2_Train('PCR4')] = stats(results.pcr4.r2train);
-        [results.stats.Mean_R2_Test('PCR4'),results.stats.Std_R2_Test('PCR4')] = stats(results.pcr4.r2test);
-        [results.stats.Mean_R2_Train('PCR5'),results.stats.Std_R2_Train('PCR5')] = stats(results.pcr5.r2train);
-        [results.stats.Mean_R2_Test('PCR5'),results.stats.Std_R2_Test('PCR5')] = stats(results.pcr5.r2test);
-        [results.stats.Mean_R2_Train('PCR20'),results.stats.Std_R2_Train('PCR20')] = stats(results.pcr20.r2train);
-        [results.stats.Mean_R2_Test('PCR20'),results.stats.Std_R2_Test('PCR20')] = stats(results.pcr20.r2test);
-    end 
-
-
-    [results.stats.Mean_R2_Train('CCA'),results.stats.Std_R2_Train('CCA')] = stats(results.cca.r2train);
-    [results.stats.Mean_R2_Test('CCA'),results.stats.Std_R2_Test('CCA')] = stats(results.cca.r2test);
-
-    [results.stats.Mean_R2_Train('LASSO'),results.stats.Std_R2_Train('LASSO')] = stats(results.lasso.r2train);
-    [results.stats.Mean_R2_Test('LASSO'),results.stats.Std_R2_Test('LASSO')] = stats(results.lasso.r2test);
-
-    [results.stats.Mean_R2_Train('RR'),results.stats.Std_R2_Train('RR')] = stats(results.rr.r2train);
-    [results.stats.Mean_R2_Test('RR'),results.stats.Std_R2_Test('RR')] = stats(results.rr.r2test);
-    
-    if case_name == "NC"
-        [results.stats.Mean_R2_Train('RR10'),results.stats.Std_R2_Train('RR10')] = stats(results.rr.r2train_a10);
-        [results.stats.Mean_R2_Test('RR10'),results.stats.Std_R2_Test('RR10')] = stats(results.rr.r2test_a10);
-    end
-    
-
-    [results.stats.Mean_R2_Train('EN'),results.stats.Std_R2_Train('EN')] = stats(results.en.r2train);
-    [results.stats.Mean_R2_Test('EN'),results.stats.Std_R2_Test('EN')] = stats(results.en.r2test);
 
 end 
+
 %% Helper Function
 
-function [mean_,std_] = stats(vector)
+function [mean_,std_] = create_stats(vector)
         mean_ = mean(vector); 
         std_ = std(vector);
 end
@@ -458,10 +213,14 @@ end
 %{
 % Now use this table as input in our input struct:
 input.data = T;
+input.data = [Case_study.DC.results(:,2),Case_study.DC.results(:,5), Case_study.DC.results(:,8), Case_study.DC.results(:,11)];
+input.data = [Case_study.DC.results(:,3),Case_study.DC.results(:,6), Case_study.DC.results(:,9), Case_study.DC.results(:,12)];
+input.data = [Case_study.DC.results(:,2:3),Case_study.DC.results(:,5:6), Case_study.DC.results(:,8:9), Case_study.DC.results(:,11:12)];
+
 
 % Set the row format of the data values (in this example we want to use
 % integers only):
-input.dataFormat = {'%i'};
+input.dataFormat = {'%.3f'};
 
 % Column alignment ('l'=left-justified, 'c'=centered,'r'=right-justified):
 input.tableColumnAlignment = 'c';

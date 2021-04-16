@@ -7,11 +7,13 @@ For everone without a MATLAB license, a html version is availbale too, that can 
 
 File: lavade.mlapp 
 
+
+To reproduce the figures and Monte Carlo simulation of the manuscript, execute Case_studies.m and figure.m . 
+You have to include the Table2Latex and exportfig folder in your path. 
+
+
 I am planning to work on a python version of this demonstrator as well. 
 Please send me a message in case you would appreciate a python version. 
-
-
-
 
 
 Joachim Schaeffer

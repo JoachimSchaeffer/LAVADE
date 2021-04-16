@@ -163,12 +163,8 @@ classdef lavade_exported < matlab.apps.AppBase
             % that case we don't want to draw new samples. 
             create_signal(app);
         end
-    
+        
         function init_light(app)
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            % Function intended to use only when class is exported for
-            % monte carlo experiments
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             latent_variable_methods(app);
             % plot_figures(app);
         end
@@ -503,7 +499,7 @@ classdef lavade_exported < matlab.apps.AppBase
 
             end
             [app.r2_train, app.rss_train, app.rmse_train] = fit_stats(app, app.y_pred_train, app.y_train);
-            [app.r2_test, app.rss_test, app.rmse_test] = fit_stats(app, app.y_pred_test, app.y_test);
+            [app.r2_test, app.rss_test, app.rmse_test] = fit_stats(app, app.y_pred_train, app.y_train);
             % Save stats in a single variable
             app.stats = [app.r2_train, app.rss_train, app.rmse_train, app.r2_test, app.rss_test, app.rmse_test];
         end
@@ -569,12 +565,12 @@ classdef lavade_exported < matlab.apps.AppBase
                 % Model doesn't have a constant term
                 plot(app.ax2, app.coeff);
                 t = sprintf('c = %.2f', 0);
-                y_pos = app.ax2.YLim(2)-0.2*(app.ax2.YLim(2)-app.ax2.YLim(1));
+                y_pos = app.ax2.YLim(2)-0.1*(app.ax2.YLim(2)-app.ax2.YLim(1));
             else
                 % Model has a constant term
                 plot(app.ax2, app.coeff(2:end));
                 t = sprintf('c = %.2f', app.coeff(1));
-                y_pos = app.ax2.YLim(2)-0.2*(app.ax2.YLim(2)-app.ax2.YLim(1));
+                y_pos = app.ax2.YLim(2)-0.1*(app.ax2.YLim(2)-app.ax2.YLim(1));
             end
 
             %text = text(app.ax2, 2, y_pos, t, 'FontSize', 15);
