@@ -3,55 +3,55 @@ classdef lavade_exported < matlab.apps.AppBase
     % Properties that correspond to app components
     properties (Access = public)
         LAVADEUIFigure                matlab.ui.Figure
-        ENAlphaSlider                 matlab.ui.control.Slider
-        ENAlphaSliderLabel            matlab.ui.control.Label
+        UIAxesReg                     matlab.ui.control.UIAxes
+        MethodDropDownLabel           matlab.ui.control.Label
+        MethodDropDown                matlab.ui.control.DropDown
+        SNRLeftSliderLabel            matlab.ui.control.Label
+        SNRLeftSlider                 matlab.ui.control.Slider
+        TrainTestSplitSlider_3Label   matlab.ui.control.Label
+        TrainTestSplitSlider          matlab.ui.control.Slider
+        DatapointsEditFieldLabel      matlab.ui.control.Label
+        DatapointsEditField           matlab.ui.control.NumericEditField
+        relevantDatapointsEditFieldLabel  matlab.ui.control.Label
+        relevantDatapointsEditField   matlab.ui.control.NumericEditField
+        ExperimentsEditFieldLabel     matlab.ui.control.Label
+        ExperimentsEditField          matlab.ui.control.NumericEditField
+        StartVEditFieldLabel          matlab.ui.control.Label
+        StartVEditField               matlab.ui.control.NumericEditField
+        EndVLabel                     matlab.ui.control.Label
+        EndVEditField                 matlab.ui.control.NumericEditField
+        SignalSliderLabel             matlab.ui.control.Label
+        SignalSlider                  matlab.ui.control.Slider
+        RightSliderLabel              matlab.ui.control.Label
+        RightSlider                   matlab.ui.control.Slider
+        LeftVLabel                    matlab.ui.control.Label
+        LeftVEditField                matlab.ui.control.NumericEditField
+        SigLEditFieldLabel            matlab.ui.control.Label
+        SigLEditField                 matlab.ui.control.NumericEditField
+        RightVLabel                   matlab.ui.control.Label
+        RightVEditField               matlab.ui.control.NumericEditField
+        SigREditFieldLabel            matlab.ui.control.Label
+        SigREditField                 matlab.ui.control.NumericEditField
+        DrawNewSampleButton           matlab.ui.control.Button
+        LatentVariableMethodDemonstratorLabel  matlab.ui.control.Label
+        PositionofSignalLabel         matlab.ui.control.Label
+        PositionSingnalSlider         matlab.ui.control.Slider
+        NoiseCheckBox                 matlab.ui.control.CheckBox
+        ComponentsEditFieldLabel      matlab.ui.control.Label
+        ComponentsEditField           matlab.ui.control.NumericEditField
+        RegularizationEditFieldLabel  matlab.ui.control.Label
+        RegularizationEditField       matlab.ui.control.NumericEditField
+        UpdatePlotsButton             matlab.ui.control.Button
+        UIAxesRegTrain                matlab.ui.control.UIAxes
+        SigSEditFieldLabel            matlab.ui.control.Label
+        SigSEditField                 matlab.ui.control.NumericEditField
+        SigEEditFieldLabel            matlab.ui.control.Label
+        SigEEditField                 matlab.ui.control.NumericEditField
+        StandardizeInputsCheckBox     matlab.ui.control.CheckBox
         Panel                         matlab.ui.container.Panel
         HoldCheckBox                  matlab.ui.control.CheckBox
-        StandardizeInputsCheckBox     matlab.ui.control.CheckBox
-        SigEEditField                 matlab.ui.control.NumericEditField
-        SigEEditFieldLabel            matlab.ui.control.Label
-        SigSEditField                 matlab.ui.control.NumericEditField
-        SigSEditFieldLabel            matlab.ui.control.Label
-        UpdatePlotsButton             matlab.ui.control.Button
-        RegularizationEditField       matlab.ui.control.NumericEditField
-        RegularizationEditFieldLabel  matlab.ui.control.Label
-        ComponentsEditField           matlab.ui.control.NumericEditField
-        ComponentsEditFieldLabel      matlab.ui.control.Label
-        NoiseCheckBox                 matlab.ui.control.CheckBox
-        PositionSingnalSlider         matlab.ui.control.Slider
-        PositionofSignalLabel         matlab.ui.control.Label
-        LatentVariableMethodDemonstratorLabel  matlab.ui.control.Label
-        DrawNewSampleButton           matlab.ui.control.Button
-        SigREditField                 matlab.ui.control.NumericEditField
-        SigREditFieldLabel            matlab.ui.control.Label
-        RightVEditField               matlab.ui.control.NumericEditField
-        RightVLabel                   matlab.ui.control.Label
-        SigLEditField                 matlab.ui.control.NumericEditField
-        SigLEditFieldLabel            matlab.ui.control.Label
-        LeftVEditField                matlab.ui.control.NumericEditField
-        LeftVLabel                    matlab.ui.control.Label
-        RightSlider                   matlab.ui.control.Slider
-        RightSliderLabel              matlab.ui.control.Label
-        SignalSlider                  matlab.ui.control.Slider
-        SignalSliderLabel             matlab.ui.control.Label
-        EndVEditField                 matlab.ui.control.NumericEditField
-        EndVLabel                     matlab.ui.control.Label
-        StartVEditField               matlab.ui.control.NumericEditField
-        StartVEditFieldLabel          matlab.ui.control.Label
-        ExperimentsEditField          matlab.ui.control.NumericEditField
-        ExperimentsEditFieldLabel     matlab.ui.control.Label
-        relevantDatapointsEditField   matlab.ui.control.NumericEditField
-        relevantDatapointsEditFieldLabel  matlab.ui.control.Label
-        DatapointsEditField           matlab.ui.control.NumericEditField
-        DatapointsEditFieldLabel      matlab.ui.control.Label
-        TrainTestSplitSlider          matlab.ui.control.Slider
-        TrainTestSplitSlider_3Label   matlab.ui.control.Label
-        SNRLeftSlider                 matlab.ui.control.Slider
-        SNRLeftSliderLabel            matlab.ui.control.Label
-        MethodDropDown                matlab.ui.control.DropDown
-        MethodDropDownLabel           matlab.ui.control.Label
-        UIAxesRegTrain                matlab.ui.control.UIAxes
-        UIAxesReg                     matlab.ui.control.UIAxes
+        ENAlphaSliderLabel            matlab.ui.control.Label
+        ENAlphaSlider                 matlab.ui.control.Slider
     end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -65,24 +65,43 @@ classdef lavade_exported < matlab.apps.AppBase
     % from matlab directly
     properties (Access = public)
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        % Properties that can be accessed in all functions 
-        % below, via app.VarName
+        % Varibales that can be accessed in all functions below, via
+        % app.VarName
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
         % Variables related to the data X and z 
         X;
+        X_std;
+        X_train; 
+        X_test; 
         y;
+        y_train;
+        y_pred_train;
+        y_test;
+        y_pred_test;
+        % coefficients
+        coeff;
         % individual sections of X
+        rand_uc_l;       %  random UnCorrrelated section Left
+        rand_uc_r;       %  random UnCorrrelated section Right
+        noise_uc_l;      %  noise UnCorrelated Left 
+        noise_uc_r;      %  noise UnCorrelated Right 
+        signal;          %  "Signal section" y = slope in this section
+        noise_signal;    %  Noise of the signal section 
         start_value;     %  Mean of first datapoint
         final_value;     %  Mean of last datapoint 
         target_left;     %  Mean of datapoint after which the signal section starts 
         target_right;    %  Mean of last datapoint of the signal section 
         measurements;    %  # of measurements, #of rows in the X matrix   
-        % Stats property needed for 
-        % Monte Carlo simulation access
+        % Fitting statistics
+        r2_train; 
+        r2_test; 
+        rss_train;
+        rss_test; 
+        rmse_train; 
+        rmse_test;
         stats;
-        % Subplots in the panel section, these properties must 
-        % be manually set up here for the subplots to work 
-        % in the matlab GUI/App
+        % Subplots in the panel section
         ax1;
         ax2;
         rank_text;       % Text for displaying the rank in ax1
@@ -94,7 +113,7 @@ classdef lavade_exported < matlab.apps.AppBase
     % from matlab directly
     methods (Access = public)
         
-    function app = init(app)
+    function init(app)
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % This function is executed when starting the app & when drawing
             % new examples. Thus, it sets up the workspace and initializes 
@@ -142,15 +161,16 @@ classdef lavade_exported < matlab.apps.AppBase
             % Cresating the X vector is outsourced, because this function
             % is also called when changing the position of the signal; In
             % that case we don't want to draw new samples. 
-            app = create_signal(app);
+            create_signal(app);
         end
     
-        function app = init_light(app)
+        function init_light(app)
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % Function intended to use only when class is exported for
             % monte carlo experiments
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            latent_variable_methods(app, 0);
+            latent_variable_methods(app);
+            % plot_figures(app);
         end
     
         function [r2, rss, rmse] = fit_stats(~, y, yfit)
@@ -263,7 +283,7 @@ classdef lavade_exported < matlab.apps.AppBase
             end
         end
         
-        function app = visibility(app, mode)
+        function visibility(app, mode)
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % Helper fuction for readibility
             % makes relevant items visble and unvisible for the respective
@@ -320,7 +340,7 @@ classdef lavade_exported < matlab.apps.AppBase
             end
         end
         
-        function app = create_signal(app)
+        function create_signal(app)
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % This function crestes the data matrix X consisting of
             % # of Experiments rows
@@ -339,43 +359,52 @@ classdef lavade_exported < matlab.apps.AppBase
             data_points_left = int64(app.PositionSingnalSlider.Value*(datapoints-data_points_signal));     
             data_points_right = datapoints - (data_points_left+data_points_signal);
             
-            rand_uc_l = zeros(app.measurements, data_points_left+1);
-            rand_uc_r = zeros(app.measurements, data_points_right+1);
-            noise_uc_l = zeros(app.measurements, data_points_left+1);
-            noise_uc_r = zeros(app.measurements, data_points_right+1);
-            signal = zeros(app.measurements, data_points_signal);
-            noise_signal = zeros(app.measurements, data_points_signal);
+            app.rand_uc_l = zeros(app.measurements, data_points_left+1);
+            app.rand_uc_r = zeros(app.measurements, data_points_right+1);
+            app.noise_uc_l = zeros(app.measurements, data_points_left+1);
+            app.noise_uc_r = zeros(app.measurements, data_points_right+1);
+            app.signal = zeros(app.measurements, data_points_signal);
+            app.noise_signal = zeros(app.measurements, data_points_signal);
             
             for i=1:app.measurements
-                rand_uc_l(i, :) = linspace(app.start_value(i), app.target_left(i), data_points_left+1);
-                noise_uc_l(i, :) = awgn(rand_uc_l(i, :), noise_l, 'measured');
+                app.rand_uc_l(i, :) = linspace(app.start_value(i), app.target_left(i), data_points_left+1);
+                app.noise_uc_l(i, :) = awgn(app.rand_uc_l(i, :), noise_l, 'measured');
                 
-                rand_uc_r(i, :) = linspace(app.target_right(i), app.final_value(i), data_points_right+1);
-                noise_uc_r(i, :) = awgn(rand_uc_r(i, :), noise_r, 'measured');
+                app.rand_uc_r(i, :) = linspace(app.target_right(i), app.final_value(i), data_points_right+1);
+                app.noise_uc_r(i, :) = awgn(app.rand_uc_r(i, :), noise_r, 'measured');
 
-                signal(i, :) =  linspace(app.target_left(i), app.target_right(i), data_points_signal);
-                noise_signal(i, :) = awgn(signal(i, :), noise_s, 'measured');
+                app.signal(i, :) =  linspace(app.target_left(i), app.target_right(i), data_points_signal);
+                app.noise_signal(i, :) = awgn(app.signal(i, :), noise_s, 'measured');
             end
             
             % Build the datamatrix X
             if app.NoiseCheckBox.Value == true
-                app.X = [noise_uc_l(:, 1:end-1), noise_signal, noise_uc_r(:, 2:end)];
+                app.X = [app.noise_uc_l(:, 1:end-1), app.noise_signal, app.noise_uc_r(:, 2:end)];
             else
-                app.X = [rand_uc_l(:, 1:end-1), signal, rand_uc_r(:, 2:end)];
+                app.X = [app.rand_uc_l(:, 1:end-1), app.signal, app.rand_uc_r(:, 2:end)];
             end
        
             % Train Test Split
             fraction_test = app.TrainTestSplitSlider.Value;            
             split_ind = int64(fraction_test*app.measurements);
-            u_lim = cast(split_ind-1, 'double');
+            
+            app.X_train = app.X(1:split_ind, :);
+            app.X_test = app.X(split_ind+1:end, :);
+
+            app.y_train = app.y(1:split_ind, :);
+            app.y_test = app.y(split_ind+1:end, :);
+            
             % Make sure that number of components is feasible
-            app.ComponentsEditField.Limits = [1 u_lim];
+            app.ComponentsEditField.Limits = [1 size(app.X_train,1)-1];
             
             % Apply the latent varibel method 
-            latent_variable_methods(app, 1);
+            latent_variable_methods(app);
+            
+            % Plot everything
+            plot_figures(app);
         end
         
-        function app = latent_variable_methods(app, plot)
+        function latent_variable_methods(app)
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % This function is the core of the software tool and performs
             % the (latent) variable regressions
@@ -383,26 +412,13 @@ classdef lavade_exported < matlab.apps.AppBase
             % Ridge Regression (RR), LASSO and Elastic Net (EN)
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
-            % Train Test Split
-            fraction_test = app.TrainTestSplitSlider.Value;            
-            split_ind = int64(fraction_test*app.measurements);
-            
-            X_train = app.X(1:split_ind, :);
-            X_test = app.X(split_ind+1:end, :);
-
-            y_train = app.y(1:split_ind, :);
-            y_test = app.y(split_ind+1:end, :);
-            
-            
-            r_xt = size(X_test, 1);
-            r_xtr = size(X_train, 1);
+            r_xt = size(app.X_test, 1);
+            r_xtr = size(app.X_train, 1);
             
             if app.StandardizeInputsCheckBox.Value == true
-                [X_train, mx, stdx] = normalize_train(app, X_train);
-                X_test = normalize_test(app, X_test, mx, stdx);
-                X_std = normalize_test(app, app.X, mx, stdx);
-            else
-                X_std = 0;
+                [app.X_train, mx, stdx] = normalize_train(app, app.X_train);
+                app.X_test = normalize_test(app, app.X_test, mx, stdx);
+                app.X_std = normalize_test(app, app.X, mx, stdx);
             end
             
             % Apply Latent Variable Methods
@@ -412,26 +428,26 @@ classdef lavade_exported < matlab.apps.AppBase
             % projected data
             if strcmp(app.MethodDropDown.Value, 'CCA')
                 visibility(app, 'CCA');
-                [A,B,r,U,V,stats] = canoncorr(X_train, y_train);
+                [A,B,r,U,V,stats] = canoncorr(app.X_train, app.y_train);
                 %[A, B, ~, ~, ~, ~] = canoncorr(X_train, y_train);
-                coeff = A/B;
+                app.coeff = A/B;
                 const_tr = ones(r_xtr, 1);
-                X_train_ = [const_tr, X_train*coeff];
-                b = regress(y_train-mean(y_train), X_train_); 
+                X_train_ = [const_tr, app.X_train*app.coeff];
+                b = regress(app.y_train-mean(app.y_train), X_train_); 
                 const_t = ones(r_xt, 1);
-                y_pred_test = [const_t, X_test*coeff]*b + mean(y_train);
-                y_pred_train = X_train_*b + mean(y_train);
+                app.y_pred_test = [const_t, app.X_test*app.coeff]*b + mean(app.y_train);
+                app.y_pred_train = X_train_*b + mean(app.y_train);
                 
             % PLS regression based on the matlab implementation of PLS   
             elseif strcmp(app.MethodDropDown.Value, 'PLS')
                 visibility(app, 'PLS');
                 ncomp = int64(app.ComponentsEditField.Value);
                 % [XL,YL,XS,YS,BETA,PCTVAR,MSE,stats] = plsregress(X_train, y_train, ncomp);
-                [~, ~, ~, ~, BETA, ~, ~, ~] = plsregress(X_train, y_train, ncomp);
-                coeff = BETA;
+                [~, ~, ~, ~, BETA, ~, ~, ~] = plsregress(app.X_train, app.y_train, ncomp);
+                app.coeff = BETA;
                 const = ones(r_xt, 1);
-                y_pred_test = [const, X_test]*BETA;
-                y_pred_train = [ones(r_xtr, 1), X_train]*BETA;
+                app.y_pred_test = [const, app.X_test]*BETA;
+                app.y_pred_train = [ones(r_xtr, 1), app.X_train]*BETA;
             
             % PCA + Regression: The data is first projected onto the
             % #component proncipal component direction. Subsequently
@@ -439,14 +455,14 @@ classdef lavade_exported < matlab.apps.AppBase
             elseif strcmp(app.MethodDropDown.Value, 'PCR')
                 visibility(app, 'PCR');
                 % [PCALoadings, PCAScores, PCAVar] = pca(X_train,'Economy',false);
-                [PCALoadings, PCAScores, ~] = pca(X_train,'Economy',false);
+                [PCALoadings, PCAScores, ~] = pca(app.X_train,'Economy',false);
                 ncomp = int64(app.ComponentsEditField.Value);
-                betaPCR = regress(y_train-mean(y_train), PCAScores(:,1:ncomp));
+                betaPCR = regress(app.y_train-mean(app.y_train), PCAScores(:,1:ncomp));
                 betaPCR = PCALoadings(:,1:ncomp)*betaPCR;
-                betaPCR = [mean(y_train) - mean(X_train)*betaPCR; betaPCR];
-                coeff = betaPCR;
-                y_pred_test = [ones(r_xt,1) X_test]*betaPCR;
-                y_pred_train = [ones(r_xtr,1) X_train]*betaPCR;
+                betaPCR = [mean(app.y_train) - mean(app.X_train)*betaPCR; betaPCR];
+                app.coeff = betaPCR;
+                app.y_pred_test = [ones(r_xt,1) app.X_test]*betaPCR;
+                app.y_pred_train = [ones(r_xtr,1) app.X_train]*betaPCR;
             
             % Ridge Regression, Least Square Regression with L2-norm
             % penalty on the weights
@@ -459,20 +475,20 @@ classdef lavade_exported < matlab.apps.AppBase
                 % y_pred = B(1) + X_test*B(2:end);
                 % y_pred_train = B(1) + X_train*B(2:end);
                 
-                B = ridge_regression(app, y_train,X_train,k);
-                y_pred_test = X_test*B;
-                y_pred_train = X_train*B;
-                coeff = B;
+                B = ridge_regression(app, app.y_train,app.X_train,k);
+                app.y_pred_test = app.X_test*B;
+                app.y_pred_train = app.X_train*B;
+                app.coeff = B;
                 
             % LASSO, Least Square Regression with L1-norm
             % penalty on the weights   
             elseif strcmp(app.MethodDropDown.Value, 'LASSO')
                 visibility(app, 'LASSO');
                 k = app.RegularizationEditField.Value;
-                [B,FitInfo] = lasso(X_train, y_train, 'Lambda', k, 'Standardize',false);
-                y_pred_test = X_test*B + FitInfo.Intercept;
-                y_pred_train = X_train*B + FitInfo.Intercept;
-                coeff = B;
+                [B,FitInfo] = lasso(app.X_train, app.y_train, 'Lambda', k, 'Standardize',false);
+                app.y_pred_test = app.X_test*B + FitInfo.Intercept;
+                app.y_pred_train = app.X_train*B + FitInfo.Intercept;
+                app.coeff = B;
                 
             % Elastic Net, weighted combination of L1 & L2 Norm penalty on
             % the weigts. 
@@ -480,24 +496,19 @@ classdef lavade_exported < matlab.apps.AppBase
                 visibility(app, 'EN');
                 k = app.RegularizationEditField.Value;
                 alpha = app.ENAlphaSlider.Value;
-                [B,FitInfo] = lasso(X_train, y_train, 'Lambda', k, 'Alpha', alpha, 'Standardize', false);
-                y_pred_test = X_test*B + FitInfo.Intercept;
-                y_pred_train = X_train*B + FitInfo.Intercept;
-                coeff = B;
+                [B,FitInfo] = lasso(app.X_train, app.y_train, 'Lambda', k, 'Alpha', alpha, 'Standardize', false);
+                app.y_pred_test = app.X_test*B + FitInfo.Intercept;
+                app.y_pred_train = app.X_train*B + FitInfo.Intercept;
+                app.coeff = B;
 
             end
-            [r2_train, rss_train, rmse_train] = fit_stats(app, y_pred_train, y_train);
-            [r2_test, rss_test, rmse_test] = fit_stats(app, y_pred_test, y_test);
+            [app.r2_train, app.rss_train, app.rmse_train] = fit_stats(app, app.y_pred_train, app.y_train);
+            [app.r2_test, app.rss_test, app.rmse_test] = fit_stats(app, app.y_pred_test, app.y_test);
             % Save stats in a single variable
-            app.stats = [r2_train, rss_train, rmse_train, r2_test, rss_test, rmse_test];
-            
-            if plot == true
-                plot_figures(app, X_std, y_train, y_test, y_pred_train, y_pred_test, coeff);
-            end
-            
+            app.stats = [app.r2_train, app.rss_train, app.rmse_train, app.r2_test, app.rss_test, app.rmse_test];
         end
         
-        function app = plot_figures(app, X_std, y_train, y_test, y_pred_train, y_pred_test, coeff)
+        function plot_figures(app)
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % This function plots the data, regression coefficients
             % as well as the regression on the train and test data
@@ -529,7 +540,7 @@ classdef lavade_exported < matlab.apps.AppBase
             [r,~] = size(app.X);
             if app.StandardizeInputsCheckBox.Value == true
                 for i=1:r
-                    plot(app.ax1, X_std(i,:));
+                    plot(app.ax1, app.X_std(i,:));
                 end
             else
                 for i=1:r
@@ -554,16 +565,16 @@ classdef lavade_exported < matlab.apps.AppBase
             app.ax2.YGrid = 'on';
 
             % Distinguish the case in which the model has a constant term
-            if length(coeff) == size(app.X, 2)
+            if length(app.coeff) == size(app.X, 2)
                 % Model doesn't have a constant term
-                plot(app.ax2, coeff);
+                plot(app.ax2, app.coeff);
                 t = sprintf('c = %.2f', 0);
-                y_pos = app.ax2.YLim(2)-0.1*(app.ax2.YLim(2)-app.ax2.YLim(1));
+                y_pos = app.ax2.YLim(2)-0.2*(app.ax2.YLim(2)-app.ax2.YLim(1));
             else
                 % Model has a constant term
-                plot(app.ax2, coeff(2:end));
-                t = sprintf('c = %.2f', coeff(1));
-                y_pos = app.ax2.YLim(2)-0.1*(app.ax2.YLim(2)-app.ax2.YLim(1));
+                plot(app.ax2, app.coeff(2:end));
+                t = sprintf('c = %.2f', app.coeff(1));
+                y_pos = app.ax2.YLim(2)-0.2*(app.ax2.YLim(2)-app.ax2.YLim(1));
             end
 
             %text = text(app.ax2, 2, y_pos, t, 'FontSize', 15);
@@ -576,25 +587,25 @@ classdef lavade_exported < matlab.apps.AppBase
             
             % Regression Plots
             % Train 
-            line = linspace(min(min(y_train), min(y_pred_train)), max(max(y_train), max(y_pred_train)), 10);
+            line = linspace(min(min(app.y_train), min(app.y_pred_train)), max(max(app.y_train), max(app.y_pred_train)), 10);
             plot(app.UIAxesRegTrain, line, line)
             
-            scatter(app.UIAxesRegTrain, y_pred_train, y_train);
+            scatter(app.UIAxesRegTrain, app.y_pred_train, app.y_train);
             axis(app.UIAxesRegTrain, 'equal');
             
-            text_train = sprintf('R^2 = %.2f', app.stats(1));
+            text_train = sprintf('R^2 = %.2f', app.r2_train);
             y_pos_train = app.UIAxesRegTrain.YLim(2)-0.15*(app.UIAxesRegTrain.YLim(2)-app.UIAxesRegTrain.YLim(1));
             x_pos_train = app.UIAxesRegTrain.XLim(1)+0.08*(app.UIAxesRegTrain.XLim(2)-app.UIAxesRegTrain.XLim(1));
             text(app.UIAxesRegTrain, x_pos_train, y_pos_train, text_train, 'FontSize', 15);
             
             % Test
-            line = linspace(min(min(y_test), min(y_pred_test)), max(max(y_test), max(y_pred_test)), 10);
+            line = linspace(min(min(app.y_test), min(app.y_pred_test)), max(max(app.y_test), max(app.y_pred_test)), 10);
             plot(app.UIAxesReg, line, line)
             
-            scatter(app.UIAxesReg, y_pred_test, y_test);
+            scatter(app.UIAxesReg, app.y_pred_test, app.y_test);
             axis(app.UIAxesReg, 'equal');
             
-            text_test = sprintf('R^2 = %.2f', app.stats(4));
+            text_test = sprintf('R^2 = %.2f', app.r2_test);
             y_pos_test = app.UIAxesReg.YLim(2)-0.15*(app.UIAxesReg.YLim(2)-app.UIAxesReg.YLim(1));
             x_pos_test = app.UIAxesReg.XLim(1)+0.08*(app.UIAxesReg.XLim(2)-app.UIAxesReg.XLim(1));
             text(app.UIAxesReg, x_pos_test, y_pos_test, text_test, 'FontSize', 15);
@@ -611,14 +622,15 @@ classdef lavade_exported < matlab.apps.AppBase
 
         % Code that executes after component creation
         function startupFcn(app)
-            app = init(app);
+            init(app);
         end
 
         % Callback function: ComponentsEditField, ENAlphaSlider, 
         % MethodDropDown, RegularizationEditField, 
         % StandardizeInputsCheckBox, UpdatePlotsButton
         function UpdatePlotsButtonPushed2(app, event)
-            app = latent_variable_methods(app, 1);
+            latent_variable_methods(app);
+            plot_figures(app);
         end
 
         % Callback function: DatapointsEditField, 
@@ -627,15 +639,16 @@ classdef lavade_exported < matlab.apps.AppBase
         % SigLEditField, SigREditField, SigSEditField, 
         % StartVEditField, relevantDatapointsEditField
         function DrawNewSampleButtonPushed(app, event)
-            app = init(app);
+            init(app)
         end
 
         % Value changed function: NoiseCheckBox, 
         % PositionSingnalSlider, RightSlider, SNRLeftSlider, 
         % SignalSlider, TrainTestSplitSlider
         function SNRleftSliderValueChanged(app, event)
-            app = create_signal(app); 
-            app = latent_variable_methods(app, 1);
+            create_signal(app); 
+            latent_variable_methods(app);
+            plot_figures(app);
         end
     end
 
@@ -657,26 +670,13 @@ classdef lavade_exported < matlab.apps.AppBase
             xlabel(app.UIAxesReg, 'y_{pred}')
             ylabel(app.UIAxesReg, 'y_{true}')
             app.UIAxesReg.PlotBoxAspectRatio = [1.03413654618474 1 1];
+            app.UIAxesReg.FontSize = 15;
             app.UIAxesReg.XTick = [0 0.5 1];
+            app.UIAxesReg.NextPlot = 'add';
             app.UIAxesReg.XGrid = 'on';
             app.UIAxesReg.YGrid = 'on';
-            app.UIAxesReg.FontSize = 15;
-            app.UIAxesReg.NextPlot = 'add';
+            app.UIAxesReg.BackgroundColor = [1 1 1];
             app.UIAxesReg.Position = [605 15 320 320];
-
-            % Create UIAxesRegTrain
-            app.UIAxesRegTrain = uiaxes(app.LAVADEUIFigure);
-            title(app.UIAxesRegTrain, 'Regression on Train Data')
-            xlabel(app.UIAxesRegTrain, 'y_{pred}')
-            ylabel(app.UIAxesRegTrain, 'y_{true}')
-            app.UIAxesRegTrain.PlotBoxAspectRatio = [1.03413654618474 1 1];
-            app.UIAxesRegTrain.XTick = [0 0.5 1];
-            app.UIAxesRegTrain.XGrid = 'on';
-            app.UIAxesRegTrain.YGrid = 'on';
-            app.UIAxesRegTrain.FontSize = 15;
-            app.UIAxesRegTrain.MinorGridAlpha = 0.1;
-            app.UIAxesRegTrain.NextPlot = 'add';
-            app.UIAxesRegTrain.Position = [938 15 320 320];
 
             % Create MethodDropDownLabel
             app.MethodDropDownLabel = uilabel(app.LAVADEUIFigure);
@@ -688,12 +688,12 @@ classdef lavade_exported < matlab.apps.AppBase
 
             % Create MethodDropDown
             app.MethodDropDown = uidropdown(app.LAVADEUIFigure);
-            app.MethodDropDown.Items = {'PLS', 'PCR', 'CCA', 'RR', 'LASSO', 'EN'};
+            app.MethodDropDown.Items = {'PLS', 'CCA', 'PCR', 'RR', 'LASSO', 'EN'};
             app.MethodDropDown.ValueChangedFcn = createCallbackFcn(app, @UpdatePlotsButtonPushed2, true);
             app.MethodDropDown.FontSize = 16.5;
             app.MethodDropDown.BackgroundColor = [1 1 1];
             app.MethodDropDown.Position = [765 763 100 22];
-            app.MethodDropDown.Value = 'PLS';
+            app.MethodDropDown.Value = 'CCA';
 
             % Create SNRLeftSliderLabel
             app.SNRLeftSliderLabel = uilabel(app.LAVADEUIFigure);
@@ -961,6 +961,21 @@ classdef lavade_exported < matlab.apps.AppBase
             app.UpdatePlotsButton.FontWeight = 'bold';
             app.UpdatePlotsButton.Position = [1084 385 108 27];
             app.UpdatePlotsButton.Text = {'Update Plots'; ''};
+
+            % Create UIAxesRegTrain
+            app.UIAxesRegTrain = uiaxes(app.LAVADEUIFigure);
+            title(app.UIAxesRegTrain, 'Regression on Train Data')
+            xlabel(app.UIAxesRegTrain, 'y_{pred}')
+            ylabel(app.UIAxesRegTrain, 'y_{true}')
+            app.UIAxesRegTrain.PlotBoxAspectRatio = [1.03413654618474 1 1];
+            app.UIAxesRegTrain.FontSize = 15;
+            app.UIAxesRegTrain.MinorGridAlpha = 0.1;
+            app.UIAxesRegTrain.XTick = [0 0.5 1];
+            app.UIAxesRegTrain.NextPlot = 'add';
+            app.UIAxesRegTrain.XGrid = 'on';
+            app.UIAxesRegTrain.YGrid = 'on';
+            app.UIAxesRegTrain.BackgroundColor = [1 1 1];
+            app.UIAxesRegTrain.Position = [938 15 320 320];
 
             % Create SigSEditFieldLabel
             app.SigSEditFieldLabel = uilabel(app.LAVADEUIFigure);

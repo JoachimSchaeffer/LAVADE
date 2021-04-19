@@ -71,7 +71,7 @@ function stats = case_study(nb_tests, case_name)
     app = lavade_exported;
     
     for i = 1:max_nloop
-        init(app)
+        app = init(app);
         if case_name == "DC"
         elseif case_name == "DSC"
             app.StandardizeInputsCheckBox.Value = true;
@@ -90,30 +90,30 @@ function stats = case_study(nb_tests, case_name)
         app.MethodDropDown.Value = "PLS";
         
         app.ComponentsEditField.Value = 1;
-        init(app)
+        app = init(app);
         stats.pls1(i,:) = app.stats; 
 
         app.ComponentsEditField.Value = 2;
-        init(app)
+        app = init(app);
         stats.pls2(i,:) = app.stats; 
         
         % Noisy case needs more details
         if case_name == "NC"
            
             app.ComponentsEditField.Value = 3;
-            init(app)
+            app = init(app);
             stats.pls3(i,:) = app.stats;  
 
             app.ComponentsEditField.Value = 4;
-            init(app)
+            app = init(app);
             stats.pls4(i,:) = app.stats; 
 
             app.ComponentsEditField.Value = 5;
-            init(app)
+            app = init(app);
             stats.pls5(i,:) = app.stats; 
 
             app.ComponentsEditField.Value = 20;
-            init(app)
+            app = init(app);
             stats.pls20(i,:) = app.stats; 
 
         end
@@ -121,30 +121,30 @@ function stats = case_study(nb_tests, case_name)
         % PCR Section 
         app.MethodDropDown.Value = "PCR";
         app.ComponentsEditField.Value = 1;
-        init(app)
+        app = init(app);
         stats.pcr1(i,:) = app.stats; 
 
         app.ComponentsEditField.Value = 2;
-        init(app)
+        app = init(app);
         stats.pcr2(i,:) = app.stats; 
         
         % Noisy case needs more details
         if case_name == "NC"
            
             app.ComponentsEditField.Value = 3;
-            init(app)
+            app = init(app);
             stats.pcr3(i,:) = app.stats; 
 
             app.ComponentsEditField.Value = 4;
-            init(app)
+            app = init(app);
             stats.pcr4(i,:) = app.stats; 
 
             app.ComponentsEditField.Value = 5;
-            init(app)
+            app = init(app);
             stats.pcr5(i,:) = app.stats; 
 
             app.ComponentsEditField.Value = 20;
-            init(app)
+            app = init(app);
             stats.pcr20(i,:) = app.stats; 
 
         end
@@ -152,25 +152,25 @@ function stats = case_study(nb_tests, case_name)
         % LASSO Section 
         app.MethodDropDown.Value = "LASSO";
         app.RegularizationEditField.Value = 0.001;
-        init(app)
+        app = init(app);
         stats.lasso(i,:) = app.stats; 
 
         % RR Section 
         app.MethodDropDown.Value = "RR";
         app.RegularizationEditField.Value = 0.001;
-        init(app)
+        app = init(app);
         stats.rrd(i,:) = app.stats; 
         
         if case_name == "NC"
             app.RegularizationEditField.Value = 10;
-            init(app)
+            app = init(app);
             stats.rr10(i,:) = app.stats; 
         end
 
         % EN Section 
         app.MethodDropDown.Value = "EN";
         app.RegularizationEditField.Value = 0.001;
-        init(app)
+        app = init(app);
         stats.EN(i,:) = app.stats; 
         
         % Print some stuff in the console
