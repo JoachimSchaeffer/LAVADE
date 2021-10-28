@@ -12,6 +12,8 @@ classdef Data < handle
         y_test;
         idx_para; % (random) index for train and test, respecting groups
         x_label_text; 
+        y_label_text;
+        output_text; 
         x_values;
         % properties on;ly neede for the example case, but its fine
         % if they are empty otherwise
@@ -63,9 +65,11 @@ classdef Data < handle
                     % The y we want to predict: Slope of the signal section
                     % Here you can also insert different responses 
                     obj.y = (obj.target_right-obj.target_left)/data_points_signal;
-                    obj.x_label_text = 'index';
+                    obj.x_label_text = 'Index';
+                    obj.y_label_text = 'Value'; 
                     obj.x_values = linspace(1,size(obj.X,2),size(obj.X,2));
                     obj.active_dataset = 'Example';
+                    obj.output_text = 'Slope';
 
                 case 'Paracetamol'
                     % Check, whether dataset was alreday loaded & noise
@@ -80,7 +84,9 @@ classdef Data < handle
                     end
                     obj.measurements = size(obj.X,1);
                     obj.active_dataset = 'Paracetamol';
-                    obj.x_label_text = 'Frequency [Hz]';
+                    obj.output_text = 'Concentration';
+                    obj.x_label_text = 'Wavenumber [cm^{-1}]';
+                    obj.y_label_text = 'Absorbance';
                     obj.x_values = freq;
                 case 'LFP' 
                     if strcmp(obj.name, obj.active_dataset)==0 || noise_change
@@ -93,7 +99,9 @@ classdef Data < handle
                     end
                     obj.measurements = size(obj.X,1);
                     obj.active_dataset = 'LFP';
-                    obj.x_label_text = 'V';
+                    obj.output_text = 'Cycle Life';
+                    obj.x_label_text = 'Voltage (V)';
+                    obj.y_label_text = '\DeltaQ_{100-10}';
                     obj.x_values = linspace(2.0,3.5,1000);
             end
          end
