@@ -1,0 +1,70 @@
+<deployment-project plugin="plugin.apptool" plugin-version="1.0">
+  <configuration build-checksum="4262811381" file="/Users/jschaeffer/Library/Mobile Documents/com~apple~CloudDocs/ETH/MastersThesis/08LAVADE/Software/01Code/LAVADE.prj" location="/Users/jschaeffer/Library/Mobile Documents/com~apple~CloudDocs/ETH/MastersThesis/08LAVADE/Software/01Code" name="LAVADE" target="target.mlapps" target-name="Package App">
+    <param.appname>LAVADE</param.appname>
+    <param.authnamewatermark>Joachim Schaeffer</param.authnamewatermark>
+    <param.email>joachim.schaeffer@posteo.de</param.email>
+    <param.company>TU Darmstadt / BatteryDEV</param.company>
+    <param.icon />
+    <param.icons />
+    <param.summary />
+    <param.description />
+    <param.screenshot>/private/var/folders/v6/hxhx0p3x5ll_w7_fbqryccb40000gn/T/tp2e58a675_f7cb_4f50_bdef_bbeede221908.png</param.screenshot>
+    <param.version>0.1</param.version>
+    <param.products.name />
+    <param.products.id />
+    <param.products.version />
+    <param.platforms />
+    <param.output>/Users/jschaeffer/Library/Mobile Documents/com~apple~CloudDocs/ETH/MastersThesis/08LAVADE/Software</param.output>
+    <param.guid>5c428405-ff57-4987-934e-d8e16ef03a5a</param.guid>
+    <unset>
+      <param.icon />
+      <param.icons />
+      <param.summary />
+      <param.description />
+      <param.products.name />
+      <param.products.id />
+      <param.products.version />
+      <param.platforms />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}/lavade.mlapp</file>
+    </fileset.main>
+    <fileset.depfun>
+      <file>${PROJECT_ROOT}/Data.m</file>
+      <file>${PROJECT_ROOT}/FTIR_data.mat</file>
+      <file>${PROJECT_ROOT}/LFP.mat</file>
+    </fileset.depfun>
+    <fileset.resources />
+    <fileset.package />
+    <build-deliverables>
+      <file location="/Users/jschaeffer/Library/Mobile Documents/com~apple~CloudDocs/ETH/MastersThesis/08LAVADE" name="Software" optional="false">/Users/jschaeffer/Library/Mobile Documents/com~apple~CloudDocs/ETH/MastersThesis/08LAVADE/Software</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>/Applications/MATLAB_R2021a.app</root>
+      <toolboxes>
+        <toolbox name="neuralnetwork" />
+      </toolboxes>
+      <toolbox>
+        <neuralnetwork>
+          <enabled>true</enabled>
+        </neuralnetwork>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>true</unix>
+      <mac>true</mac>
+      <windows>false</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>10.16</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>maci64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>
