@@ -1,15 +1,14 @@
 # LAVADE: Latent Variable Demonstrator
-
 This repository contains a demonstrator to build intuition on latent variable approaches and regression approaches in general.
 
-The widget was written in MATLAB_R2021a by using the MATLAB app designer toolbox.
-For everyone without a MATLAB license, a html version is available too, that can be executed in every browser.
+The app was written in MATLAB_R2021a by using the MATLAB app designer toolbox.
+If you want an installable version that does not require a MATLAB license, please drop me a message. 
 
-Structure: The folder code contains the software. 
+Structure: The folder code contains the source code. 
+01Code/lavade.mlapp Main file of the app. 
+Data.m Data class definition, modify this class including functions to implement your own/additional datasets. 
 
-Main File: 01Code/lavade.mlapp
-
-Feel free to start a python version, I'd be happy to host it here too. 
+Feel free to start a python version; I'd be happy to assist and to host it here too. 
 
 For bugs and feedback: 
 joachim.schaeffer@posteo.de
