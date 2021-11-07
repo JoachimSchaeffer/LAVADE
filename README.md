@@ -1,4 +1,7 @@
 # LAVADE: Latent Variable Demonstrator
+Version 0.1 
+Work on restructuring the code in progress. Version 1.0 coming soon. 
+
 This repository contains a demonstrator to build intuition on latent variable approaches and regression approaches in general.
 
 The app was written in MATLAB_R2021a by using the MATLAB app designer toolbox.
