@@ -101,8 +101,8 @@ classdef Data < handle
         function add_noise(obj, noise, noise_X, noise_y)
         % Adding noise to the data matrix X as well as y  
             if noise
-                obj.X = awgn(obj.X, noise_X, 'measured');
-                obj.y = awgn(obj.y, noise_y, 'measured');
+                obj.X = addwgn(obj.X, noise_X);
+                obj.y = addwgn(obj.y, noise_y);
             end
         end 
          
