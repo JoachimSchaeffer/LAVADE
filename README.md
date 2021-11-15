@@ -1,6 +1,5 @@
 # LAVADE: Latent Variable Demonstrator
-Version 0.1 
-Work on restructuring the code in progress. Version 1.0 coming soon. 
+Version 1.0
 
 This repository contains a demonstrator to build intuition on latent variable approaches and regression approaches in general.
 
