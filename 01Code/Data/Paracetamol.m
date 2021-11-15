@@ -1,4 +1,4 @@
-classdef LFP < Data_class
+classdef Paracetamol < Data_class
     %LFP Summary of this class goes here
     
     properties
@@ -17,23 +17,23 @@ classdef LFP < Data_class
     end
     
     methods
-        function obj = LFP()
+        function obj = Paracetamol()
             % LFP Construct an instance of this class
             % LFP is a subclass of the dataclass
             % Load data 
-            data_struct = load('LFP.mat');
-            X = flip(data_struct.DQ_100_10,2);
-            obj = obj@Data_class(X, data_struct.y);
+            data_struct = load('Paracetamol.mat');
+            obj = obj@Data_class(data_struct.X, data_struct.y);
             obj.group = data_struct.group;
-            obj.measurements = size(obj.X,1);
+            obj.measurements = size(obj.X, 1);
             
-            obj.name = 'LFP'; 
-            obj.output_text = 'Cycle Life';
-            obj.x_label_text = 'Voltage (V)';
-            obj.y_label_text = '\DeltaQ_{100-10}';
-            obj.x_values = linspace(2.0,3.5,1000);
-            obj.ttr_limits = [0.1 0.9];
-            obj.ttr_majorticks = [0.1 0.3 0.5 0.7 0.9];
+            obj.name = 'Paracetamol';
+            obj.output_text = 'Concentration';
+            obj.x_label_text = 'Wavenumber [cm^{-1}]';
+            obj.y_label_text = 'Absorbance';
+            obj.x_values = data_struct.freq;
+
+            obj.ttr_limits = [0.3 0.7];
+            obj.ttr_majorticks = [0.3 0.5 0.7];
             obj.vis = 'off';
             obj.vis_cb = 'on';
         end
@@ -43,7 +43,7 @@ classdef LFP < Data_class
             % to the fraction. Respects the grouping structure if requested
             % to do so
             if group
-                groups = size(unique(obj.group),1);
+                groups = 5;
                 if new
                     obj.idx_para = randperm(groups);
                 end
@@ -53,6 +53,5 @@ classdef LFP < Data_class
             end
             train_test_split@Data_class(obj, fraction_train, new, group)
         end
-        
     end
 end

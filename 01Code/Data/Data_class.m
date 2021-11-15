@@ -10,13 +10,17 @@ classdef Data_class < handle
         X_test;
         y_train;
         y_test;
+        idx_para;
+        u_lim;
+        idx_train;
+        idx_test;
     end
 
     properties (Constant)
     end
     
     methods
-        function obj = Data(X,y)
+        function obj = Data_class(X,y)
             % Very simple constructor
             obj.X = X; 
             obj.y = y;
@@ -34,15 +38,23 @@ classdef Data_class < handle
                 obj.y = obj.y_true;
             end
         end 
-         
-        function train_test_split(obj, idx_train, idx_test)
+        
+        function train_test_split(obj, fraction_train, new, group)
             % splits the dataset into training and test dataset, accroding
             % to the fraction. Respects the grouping structure if requested
             % to do so for the 'Paracetamol' and 'LFP' dataset 
-            obj.X_train = obj.X(idx_train,:);
-            obj.X_test = obj.X(idx_test,:);
-            obj.y_train = obj.y(idx_train);
-            obj.y_test = obj.y(idx_test);
-        end
+            if ~group
+                if new
+                    obj.idx_para = randperm(obj.measurements);
+                end
+                obj.idx_train = obj.idx_para(1:round(fraction_train*obj.measurements));
+                obj.idx_test = obj.idx_para(round(fraction_train*obj.measurements):end);
+            end 
+            obj.X_train = obj.X(obj.idx_train,:);
+            obj.X_test = obj.X(obj.idx_test,:);
+            obj.y_train = obj.y(obj.idx_train);
+            obj.y_test = obj.y(obj.idx_test);
+            obj.u_lim = cast(size(obj.X_train,1)-1, 'double');
+        end 
      end 
 end 
