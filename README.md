@@ -3,8 +3,7 @@ Version 1.0
 
 This repository contains a demonstrator to build intuition on latent variable approaches and regression approaches in general.
 
-The LAVADE Software contains processed data that was published with [1] and [2]. <br />
-The full spectral dataset used in this software is available at [tbd] <br />
+The LAVADE Software contains processed data The spectral dataset is part of the work in [1] and the LFP dataset was published in [2]. <br />
 The full LFP dataset used in this software is available at https://data.matr.io/1/projects/5c48dd2bc625d700019f3204 and is published under a CC BY 4 license. <br />
 
 The app was written in MATLAB_R2021a by using the MATLAB app designer toolbox.
@@ -26,5 +25,5 @@ Please cite this Software as:
 tbd
 
 References: <br />
-[1] Source of Spectral data tbd <br />
+[1] Fujiwara et. al. Paracetamol Crystallization Using Laser Backscattering and ATR-FTIR Spectroscopy: Metastability, Agglomeration, and Control.  Crystal Growth & Design 2, pages 363–370 (2002). <br />
 [2] Severson et al. Data-driven prediction of battery cycle life before capacity degradation. Nature Energy volume 4, pages 383–391 (2019). <br />
