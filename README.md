@@ -3,6 +3,8 @@ Version 1.0
 
 This repository contains a demonstrator to build intuition on latent variable approaches and regression approaches in general.
 
+The LAVADE Software contains processed data that was published with [1]. The full LFP Dataset used in this software is available at https://data.matr.io/1/projects/5c48dd2bc625d700019f3204. 
+
 The app was written in MATLAB_R2021a by using the MATLAB app designer toolbox.
 If you want an installable version that does not require a MATLAB license, please drop me a message. 
 
@@ -18,3 +20,6 @@ joachim.schaeffer@posteo.de
 Have fun!
 Joachim Schaeffer
 
+
+References: 
+[1] Severson et al. Data-driven prediction of battery cycle life before capacity degradation. Nature Energy volume 4, pages 383–391 (2019).
