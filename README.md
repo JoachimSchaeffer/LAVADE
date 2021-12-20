@@ -3,7 +3,7 @@ Version 1.0
 
 This repository contains a MATLAB app to build intuition on latent variable approaches and regression approaches in general.
 
-The LAVADE software contains processed data. The spectral dataset was publsihed with [1], and the LFP dataset was published in [2]. <br />
+The LAVADE software contains processed data. The paracetamol dataset consists of ATR-FTIR spectra and temperature measurements which were measured in the laboratory according to the procedure described in [1]. The LFP dataset was published with [2] where more details about the dataset can be found as well. <br />
 The full LFP dataset used in this software is available at https://data.matr.io/1/projects/5c48dd2bc625d700019f3204 and is published under a CC BY 4 license. <br />
 
 The app was written in MATLAB_R2021a by using the MATLAB app designer toolbox.
