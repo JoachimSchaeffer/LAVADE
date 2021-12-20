@@ -25,5 +25,5 @@ Please cite this Software as:
 tbd
 
 References: <br />
-[1] Fujiwara et. al. Paracetamol Crystallization Using Laser Backscattering and ATR-FTIR Spectroscopy: Metastability, Agglomeration, and Control.  Crystal Growth & Design 2, pages 363–370 (2002). <br />
+[1] Fujiwara et. al. Paracetamol Crystallization Using Laser Backscattering and ATR-FTIR Spectroscopy: Metastability, Agglomeration, and Control.  Crystal Growth & Design volume 2, pages 363–370 (2002). <br />
 [2] Severson et al. Data-driven prediction of battery cycle life before capacity degradation. Nature Energy volume 4, pages 383–391 (2019). <br />
