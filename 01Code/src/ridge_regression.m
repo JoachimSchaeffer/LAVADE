@@ -9,5 +9,5 @@ function b = ridge_regression(y, X, k)
     % Use closed form solution for this demonstrator, because speed doesnt
     % play an important role (small datasets)
     n_col = size(X,2);
-    b = (X'*X+k*eye(n_col))\(X'*y);
+    b = (Z'*Z+k*eye(n_col))\(Z'*y);
 end
