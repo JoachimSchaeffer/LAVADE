@@ -1,5 +1,5 @@
 classdef Paracetamol < Data_class
-    %LFP Summary of this class goes here
+    % Summary of this class goes here
     
     properties
         name; 
@@ -18,8 +18,8 @@ classdef Paracetamol < Data_class
     
     methods
         function obj = Paracetamol()
-            % LFP Construct an instance of this class
-            % LFP is a subclass of the dataclass
+            % Construct an instance of this class
+            % is a subclass of the dataclass
             % Load data 
             data_struct = load('Paracetamol.mat');
             obj = obj@Data_class(data_struct.X, data_struct.y);

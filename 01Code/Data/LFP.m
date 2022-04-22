@@ -1,5 +1,5 @@
 classdef LFP < Data_class
-    %LFP Summary of this class goes here
+    % Summary of this class goes here
     
     properties
         name; 
@@ -18,8 +18,8 @@ classdef LFP < Data_class
     
     methods
         function obj = LFP()
-            % LFP Construct an instance of this class
-            % LFP is a subclass of the dataclass
+            % Construct an instance of this class
+            % is a subclass of the dataclass
             % Load data 
             data_struct = load('LFP.mat');
             X = flip(data_struct.DQ_100_10,2);
