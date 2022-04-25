@@ -40,15 +40,16 @@ classdef Data_class < handle
         end 
         
         function train_test_split(obj, fraction_train, new, group)
-            % splits the dataset into training and test dataset, accroding
+            % splits the dataset into training and test dataset, according
             % to the fraction. Respects the grouping structure if requested
             % to do so for the 'Paracetamol' and 'LFP' dataset 
             if ~group
                 if new
                     obj.idx_para = randperm(obj.measurements);
                 end
-                obj.idx_train = obj.idx_para(1:round(fraction_train*obj.measurements));
-                obj.idx_test = obj.idx_para(round(fraction_train*obj.measurements):end);
+                cut_idx = round(fraction_train*obj.measurements);
+                obj.idx_train = obj.idx_para(1:cut_idx);
+                obj.idx_test = obj.idx_para(cut_idx+1:end);
             end 
             obj.X_train = obj.X(obj.idx_train,:);
             obj.X_test = obj.X(obj.idx_test,:);

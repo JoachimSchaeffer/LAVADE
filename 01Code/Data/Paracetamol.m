@@ -21,17 +21,30 @@ classdef Paracetamol < Data_class
             % Construct an instance of this class
             % is a subclass of the dataclass
             % Load data 
-            data_struct = load('Paracetamol.mat');
-            obj = obj@Data_class(data_struct.X, data_struct.y);
-            obj.group = data_struct.group;
+            A = importdata('Paracetamol.txt');
+            
+            X = A(1:size(A,1)-2,2:end)';
+            c = A(size(A,1), 2:end)';
+            y = c./(1+c);
+            obj = obj@Data_class(X, y);
+            
+            % Temperature is unused
+            % T = A(size(A,1)-1,2:end)';
+            
+            % Frequency 
+            obj.x_values = A(1:size(A,1)-2,1)';
+            
+            [~,~,obj.group] = unique(y);
+            % Setting the groupnumber of the biased group to zero
+            obj.group(obj.group==2) = 0;
+            obj.group(obj.group>2) = obj.group(obj.group>2)-1;
+                
             obj.measurements = size(obj.X, 1);
             
-            obj.name = 'Paracetamol';
+            obj.name = 'Paracetamol Spectra';
             obj.output_text = 'Concentration';
             obj.x_label_text = 'Wavenumber [cm^{-1}]';
             obj.y_label_text = 'Absorbance';
-            obj.x_values = data_struct.freq;
-
             obj.ttr_limits = [0.3 0.7];
             obj.ttr_majorticks = [0.3 0.5 0.7];
             obj.vis = 'off';
@@ -39,7 +52,7 @@ classdef Paracetamol < Data_class
         end
         
         function train_test_split(obj, fraction_train, new, group)
-            % splits the dataset into training and test dataset, accroding
+            % splits the dataset into training and test dataset, according
             % to the fraction. Respects the grouping structure if requested
             % to do so
             if group
