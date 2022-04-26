@@ -27,7 +27,9 @@ X3 = [3*ones(size(X3,1), 1), X3, y3(:, 1:4)];
 X4 = [4*ones(size(X4,1), 1), X4, y4(:, 1:4)];
 X5 = [5*ones(size(X5,1), 1), X5, y5(:, 1:4)];
 X = [X1;X2;X3;X4;X5];
+%%
 T = array2table(X);
+%T = array2table(data_raman);
 T.Properties.VariableNames(1) = {...
     'RunId 1:fb_r3, 2:perf_r1, 3:perf_r4, 4:perf_R2, 4:perf_R2'};
 for i=2:3327

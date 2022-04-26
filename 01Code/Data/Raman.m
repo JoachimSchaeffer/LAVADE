@@ -18,11 +18,22 @@ classdef Raman < Data_class
     end
     
     methods
-        function obj = Raman(~, meta)
+        function obj = Raman(filter, meta)
             % Construct an instance of this class.
             % This is a subclass of the dataclass.
             % Load data:
-            data_raman = readmatrix('RamanMsback.csv', 'NumHeaderLines', 1);
+            switch filter
+                case 'raw'
+                    data_raman = readmatrix('RamanRaw.csv', 'NumHeaderLines', 1);
+                case 'LMJ5'
+                    data_raman = readmatrix('RamanLMJBackSub.csv', 'NumHeaderLines', 1);
+                case 'LMJ6'
+                    data_raman = readmatrix('RamanLMJBackSubOrder6.csv', 'NumHeaderLines', 1);
+                case 'msback'
+                    data_raman = readmatrix('RamanMsback.csv', 'NumHeaderLines', 1);
+            end
+             
+            
             groups = data_raman(:,1);
             X = data_raman(:,2:end-4);
             x_vals = linspace(100,100-1+size(X,2), size(X,2));
