@@ -22,7 +22,7 @@ classdef Raman < Data_class
             % Construct an instance of this class.
             % This is a subclass of the dataclass.
             % Load data:
-            data_raman = readmatrix('RamanRaw.csv', 'NumHeaderLines', 1);
+            data_raman = readmatrix('RamanMsback.csv', 'NumHeaderLines', 1);
             groups = data_raman(:,1);
             X = data_raman(:,2:end-4);
             x_vals = linspace(100,100-1+size(X,2), size(X,2));
@@ -72,6 +72,7 @@ classdef Raman < Data_class
                     obj.idx_para = randperm(groups);
                 end
                 obj.train_groups = obj.idx_para(1:ceil(fraction_train*groups));
+                disp(obj.train_groups)
                 obj.idx_test = sum(obj.group==obj.train_groups,2)==0;
                 obj.idx_train = sum(obj.group==obj.train_groups,2)==1;
             end
