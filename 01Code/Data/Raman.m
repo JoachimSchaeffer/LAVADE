@@ -18,61 +18,15 @@ classdef Raman < Data_class
     end
     
     methods
-        function obj = Raman(run, meta)
+        function obj = Raman(~, meta)
             % Construct an instance of this class.
             % This is a subclass of the dataclass.
             % Load data:
-            
-            switch run
-                case 'fb_r3' 
-                    X = readmatrix('20200820_fb_r3_X_nbFlex.csv');
-                    y = readmatrix('20200820_fb_r3_y_nbFlex.csv');
-                    % Frequency 
-                    x_vals = readmatrix('20200820_fb_r3spectra_X_nbFlex.csv');
-                case 'perf_r1' 
-                    X = readmatrix('20200911_perf_r1_X_nbFlex.csv');
-                    y = readmatrix('20200911_perf_r1_y_nbFlex.csv');
-                    % Frequency 
-                    x_vals = readmatrix('20200911_perf_r1spectra_X_nbFlex.csv');
-                case 'perf_r4'
-                    X = readmatrix('20210312_perf_r4_X_nbFlex.csv');
-                    y = readmatrix('20210312_perf_r4_y_nbFlex.csv');
-                    % Frequency 
-                    x_vals = readmatrix('20210312_perf_r4spectra_X_nbFlex.csv');
-                case 'perf_R1'
-                    X = readmatrix('20210507_perf_R1_X_nbFlex.csv');
-                    y = readmatrix('20210507_perf_R1_y_nbFlex.csv');
-                    % Frequency 
-                    x_vals = readmatrix('20210507_perf_R1spectra_X_nbFlex.csv');
-                case 'perf_R2'
-                    X = readmatrix('20210709_perf_R2_X_nbFlex.csv');
-                    y = readmatrix('20210709_perf_R2_y_nbFlex.csv');
-                    % Frequency 
-                    x_vals = readmatrix('20210709_perf_R2spectra_X_nbFlex.csv');
-                case 'perf_R3'
-                    X = readmatrix('20211119_perf_R3_X_nbFlex.csv');
-                    y = readmatrix('20211119_perf_R3_y_nbFlex.csv');
-                    % Frequency 
-                    x_vals = readmatrix('20211119_perf_R3spectra_X_nbFlex.csv');
-                case 'all'
-                    % Instead Load all the data and have the runs as groups (; 
-                    X1 = readmatrix('20200820_fb_r3_X_nbFlex.csv');
-                    y1 = readmatrix('20200820_fb_r3_y_nbFlex.csv');
-                    X2 = readmatrix('20200911_perf_r1_X_nbFlex.csv');
-                    y2 = readmatrix('20200911_perf_r1_y_nbFlex.csv');
-                    X3 = readmatrix('20210312_perf_r4_X_nbFlex.csv');
-                    y3 = readmatrix('20210312_perf_r4_y_nbFlex.csv');
-                    X4 = readmatrix('20210709_perf_R2_X_nbFlex.csv');
-                    y4 = readmatrix('20210709_perf_R2_y_nbFlex.csv');
-                    X5 = readmatrix('20211119_perf_R3_X_nbFlex.csv');
-                    y5 = readmatrix('20211119_perf_R3_y_nbFlex.csv');
-                    % Frequency 
-                    x_vals = readmatrix('20200820_fb_r3spectra_X_nbFlex.csv');
-                    X = [X1; X2; X3; X4; X5];
-                    groups = [...
-                        0*ones(size(X1,1), 1); ones(size(X2,1), 1); 2*ones(size(X3,1), 1);
-                        3*ones(size(X4,1), 1); 4*ones(size(X5,1), 1)];
-            end
+            data_raman = readmatrix('RamanRaw.csv', 'NumHeaderLines', 1);
+            groups = data_raman(:,1);
+            X = data_raman(:,2:end-4);
+            x_vals = linspace(100,100-1+size(X,2), size(X,2));
+            y = data_raman(:, end-3:end);     
             
             switch meta
                 case 'Gluc'
@@ -85,10 +39,13 @@ classdef Raman < Data_class
                     idx = 4;
             end
             
-            y = [y1(:,1:4); y2(:,1:4); y3(:,1:4); y4(:,1:4); y5(:,1:4)];
+            % Restrict the Raman spectra range for the analysis. 
+            % 400 - 1800 cm-1 (index 1 corresponds to 100cm-1)
+            X_ = X(:, 300:1700);
+            x_vals_ = x_vals(1, 300:1700);
 
-            obj = obj@Data_class(X(:,:), y(:,idx));
-            obj.x_values = x_vals(1, :);
+            obj = obj@Data_class(X_, y(:,idx));
+            obj.x_values = x_vals_;
             obj.group = groups;
 
             obj.measurements = size(obj.X, 1);
