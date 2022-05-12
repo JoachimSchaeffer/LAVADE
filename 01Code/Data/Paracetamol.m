@@ -1,19 +1,8 @@
 classdef Paracetamol < Data_class
-    % Summary of this class goes here
+    %Paracetamol dataset class 
     
     properties
-        name; 
-        group;
-        x_label_text;   % x-axis label of the data X
-        y_label_text;   % y-xis label of the data X
-        output_text;    %
-        measurements;
-        x_values;
-        vis;            % Visibility details in LAVADE file
-        vis_cb;         % Visibility details in LAVADE file
-        ttr_limits;     % Train test Ratio Limits
-        ttr_majorticks; % Train test Ratio Major Ticks
-        
+        % Local properties exclusively for this dataset go in here
     end
     
     methods
@@ -43,11 +32,12 @@ classdef Paracetamol < Data_class
             
             obj.name = 'Paracetamol Spectra';
             obj.output_text = 'Concentration';
+            obj.y_unit = '(g/g)';
             obj.x_label_text = 'Wavenumber [cm^{-1}]';
             obj.y_label_text = 'Absorbance';
             obj.ttr_limits = [0.3 0.7];
             obj.ttr_majorticks = [0.3 0.5 0.7];
-            obj.vis = 'off';
+            % Grouping check box
             obj.vis_cb = 'on';
         end
         

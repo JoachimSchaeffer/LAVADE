@@ -1,23 +1,8 @@
 classdef Example < Data_class
-    %LFP Summary of this class goes here
+    %Example dataset class 
     
     properties
-        name; 
-        group;
-        x_label_text;   % x-axis label of the data X
-        y_label_text;   % y-xis label of the data X
-        output_text;    %
-        measurements;
-        x_values;
-        vis;            % Visibility details in LAVADE file
-        vis_cb;         % Visibility details in LAVADE file
-        ttr_limits;     % Train test Ratio Limits
-        ttr_majorticks; % Train test Ratio Major Ticks
-        % properties only neede for the example case
-        %start_value;    %  Mean of first datapoint
-        %final_value;    %  Mean of last datapoint 
-        %target_left;    %  Mean of datapoint after which the signal section starts 
-        %target_right;   %  Mean of last datapoint of the signal section 
+        % Local properties exclusively for this dataset go in here
     end
     
     methods
@@ -62,10 +47,12 @@ classdef Example < Data_class
             obj.x_values = linspace(1,size(obj.X,2),size(obj.X,2));
             obj.name = 'Example';
             obj.output_text = 'Slope';
-
+            obj.y_unit = '';
             obj.ttr_limits = [0.1 0.9];
             obj.ttr_majorticks = [0.1 0.3 0.5 0.7 0.9];
+            % Turn on the visibiliy of data generation gui elements
             obj.vis = 'on';
+            % Grouping check box
             obj.vis_cb = 'off';
         end
         

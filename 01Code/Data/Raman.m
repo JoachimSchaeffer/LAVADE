@@ -1,20 +1,8 @@
 classdef Raman < Data_class
-    % Summary of this class goes here
+    %Raman datset class
     
     properties
-        name; 
-        group;
-        train_groups;
-        x_label_text;   % x-axis label of the data X
-        y_label_text;   % y-xis label of the data X
-        output_text;    %
-        measurements;
-        x_values;
-        vis;            % Visibility details in LAVADE file
-        vis_cb;         % Visibility details in LAVADE file
-        ttr_limits;     % Train test Ratio Limits
-        ttr_majorticks; % Train test Ratio Major Ticks
-        
+        % Local properties exclusively for this dataset go in here
     end
     
     methods
@@ -23,13 +11,13 @@ classdef Raman < Data_class
             % This is a subclass of the dataclass.
             % Load data:
             switch filter
-                case 'raw'
+                case 'No Background Removed'
                     data_raman = readmatrix('RamanRaw.csv', 'NumHeaderLines', 1);
                 case 'LMJ5'
-                    data_raman = readmatrix('RamanLMJBackSub.csv', 'NumHeaderLines', 1);
+                    data_raman = readmatrix('RamanLMJBackSubOrder5.csv', 'NumHeaderLines', 1);
                 case 'LMJ6'
                     data_raman = readmatrix('RamanLMJBackSubOrder6.csv', 'NumHeaderLines', 1);
-                case 'msback'
+                case 'Matlab msback'
                     data_raman = readmatrix('RamanMsback.csv', 'NumHeaderLines', 1);
             end
              
@@ -42,12 +30,20 @@ classdef Raman < Data_class
             switch meta
                 case 'Gluc'
                     idx = 1; 
+                    y_unit = '(g/L)';
+                    output_text = 'Glucose Concentration';
                 case 'Lac'
                     idx = 2;
+                    y_unit = '(g/L)';
+                    output_text = 'Lactate Concentration';
                 case 'Gln'
                     idx = 3;
+                    y_unit = '(mmol/L)';
+                    output_text = 'Glutamine Concentration';
                 case 'NH4'
                     idx = 4;
+                    y_unit = '(mmol/L)';
+                    output_text = 'NH_4 Concentration';
             end
             
             % Restrict the Raman spectra range for the analysis. 
@@ -58,18 +54,20 @@ classdef Raman < Data_class
             obj = obj@Data_class(X_, y(:,idx));
             obj.x_values = x_vals_;
             obj.group = groups;
-
             obj.measurements = size(obj.X, 1);
             
             obj.name = 'Raman Spectra';
-            obj.output_text = 'Concentration';
+            obj.y_unit = y_unit;
+            obj.output_text = output_text; 
             obj.x_label_text = 'Raman Shift (cm^{-1})';
             obj.y_label_text = 'Counts';
             % Train-Test Ratio Limits
-            obj.ttr_limits = [0.3 0.7];
-            obj.ttr_majorticks = [0.3 0.5 0.7];
-            obj.vis = 'off';
+            obj.ttr_limits = [0.1 0.9];
+            obj.ttr_majorticks = [0.1 0.3 0.5 0.7 0.9];
+            % Grouping check box
             obj.vis_cb = 'on';
+            % Raman specific drop downs.
+            obj.vis_dd_raman = 'on';
         end
         
 
@@ -78,14 +76,15 @@ classdef Raman < Data_class
             % to the fraction. Respects the grouping structure if requested
             % to do so
             if group
-                groups = 5;
+                % Only two groups
+                groups = 2;
+                obj.idx_para = randperm(groups);
                 if new
-                    obj.idx_para = randperm(groups);
+                    obj.idx_para = flip(obj.idx_para);
                 end
-                obj.train_groups = obj.idx_para(1:ceil(fraction_train*groups));
-                disp(obj.train_groups)
-                obj.idx_test = sum(obj.group==obj.train_groups,2)==0;
-                obj.idx_train = sum(obj.group==obj.train_groups,2)==1;
+                train_groups = obj.idx_para(1);
+                obj.idx_test = sum(obj.group==train_groups,2)==0;
+                obj.idx_train = sum(obj.group==train_groups,2)==1;
             end
             train_test_split@Data_class(obj, fraction_train, new, group)
         end

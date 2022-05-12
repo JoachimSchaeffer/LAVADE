@@ -1,19 +1,8 @@
 classdef LFP < Data_class
-    % Summary of this class goes here
+    %LFP dataset class
     
     properties
-        name; 
-        group;
-        x_label_text;   % x-axis label of the data X
-        y_label_text;   % y-xis label of the data X
-        output_text;    %
-        measurements;
-        x_values;
-        vis;            % Visibility details in LAVADE file
-        vis_cb;         % Visibility details in LAVADE file
-        ttr_limits;     % Train test Ratio Limits
-        ttr_majorticks; % Train test Ratio Major Ticks
-        
+        % Local properties exclusively for this dataset go in here
     end
     
     methods
@@ -29,12 +18,13 @@ classdef LFP < Data_class
             
             obj.name = 'LFP'; 
             obj.output_text = 'Cycle Life';
+            obj.y_unit = '(cycles)';
             obj.x_label_text = 'Voltage (V)';
             obj.y_label_text = '\DeltaQ_{100-10}';
             obj.x_values = linspace(2.0,3.5,1000);
             obj.ttr_limits = [0.1 0.9];
             obj.ttr_majorticks = [0.1 0.3 0.5 0.7 0.9];
-            obj.vis = 'off';
+            % Grouping check box
             obj.vis_cb = 'on';
         end
         
