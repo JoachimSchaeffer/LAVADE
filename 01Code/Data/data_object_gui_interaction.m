@@ -7,7 +7,7 @@ function obj = data_object_gui_interaction(app, dataset)
         case 'LFP'
             obj = LFP();
         case 'Raman Spectra'
-            obj = Raman(app.DropDownRun.Value, app.DropDownMeta.Value);
+            obj = Raman(app.DropDownPrePro.Value, app.DropDownMeta.Value);
     end
 end 
 
