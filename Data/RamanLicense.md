@@ -1,3 +1,12 @@
+Associated publication: 
+
+Bozinovski, D., Cummings Bende, E., Maloney, A., Sangerman, J., Dubs, A., Lu,
+A., Hong, M.S., Persits, N., Artamonova, A., Ou, R.W., Sun, W., Wolfrum, J.,
+Barone, P., Springs, S., Braatz, R., Sinskey, A., 2022. Biomanufacturing and
+testbed development for the continuous production of monoclonal antibodies,
+in: ACS Spring Meeting, San Diego, California. Abstract 3661909, associated
+journal manuscript in preparation.
+
 CC-BY Version 4.0 
 
 Attribution 4.0 International
