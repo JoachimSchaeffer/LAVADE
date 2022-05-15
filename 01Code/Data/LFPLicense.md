@@ -11,6 +11,7 @@ doi:10.1038/s41560-019-0356-8
 Copy of license text:
 
 License: 
+CC-BY Version 4.0 
 Attribution 4.0 International
 
 =======================================================================
