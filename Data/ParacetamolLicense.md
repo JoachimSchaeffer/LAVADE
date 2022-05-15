@@ -1,4 +1,5 @@
 Associated publication: 
+
 Fujiwara, M., Chow, P.S., Ma, D.L., Braatz, R.D., 2002. Paracetamol crys-
 tallization using laser backscattering and ATR-FTIR spectroscopy: Metasta-
 bility, agglomeration, and control. Crystal Growth & Design 2, 363–370.
