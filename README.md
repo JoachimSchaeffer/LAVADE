@@ -3,8 +3,7 @@ Version 1.0.0
 
 This repository contains a MATLAB app to build intuition on latent variable approaches and regression approaches in general.
 
-The LAVADE software contains processed data. The paracetamol dataset consists of ATR-FTIR spectra and temperature measurements that were recorded and used for [1]. The LFP dataset was published with [2] where more details about the dataset can be found as well. <br />
-The full LFP dataset used in this software is available at https://data.matr.io/1/projects/5c48dd2bc625d700019f3204 and is published under a CC BY 4 license. <br />
+The LAVADE software contains processed data (ATR-FTIR spectra, Raman Spectra, LFP Battery Data, more information can be found here https://arxiv.org/abs/2205.08132). 
 
 The app was written in MATLAB_R2021a by using the MATLAB app designer toolbox.
 If you want an installable version that does not require a MATLAB license, please drop me a message. 
@@ -21,9 +20,13 @@ joachim.schaeffer@posteo.de
 Have fun!<br />
 Joachim Schaeffer
 
-Please cite this Software as: 
-tbd
-
-References: <br />
-[1] Fujiwara et. al. Paracetamol Crystallization Using Laser Backscattering and ATR-FTIR Spectroscopy: Metastability, Agglomeration, and Control.  Crystal Growth & Design volume 2, pages 363–370 (2002). <br />
-[2] Severson et al. Data-driven prediction of battery cycle life before capacity degradation. Nature Energy volume 4, pages 383–391 (2019). <br />
+Please cite this Software as: <br />
+https://arxiv.org/abs/2205.08132 <br />
+@misc{schaeffer2022latent, <br />
+    title={Latent Variable Method Demonstrator - Software for Understanding Multivariate Data Analytics Algorithms}, <br />
+    author={Joachim Schaeffer and Richard Braatz}, <br />
+    year={2022}, <br />
+    eprint={2205.08132}, <br />
+    archivePrefix={arXiv}, <br />
+    primaryClass={stat.ML} <br />
+}
