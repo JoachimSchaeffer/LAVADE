@@ -3,7 +3,9 @@ Version 1.0.0
 
 This repository contains a MATLAB app to build intuition on latent variable approaches and regression approaches in general.
 
-The LAVADE software contains processed data (ATR-FTIR spectra, Raman Spectra, LFP Battery Data, more information can be found here https://arxiv.org/abs/2205.08132). 
+The LAVADE software contains processed data (ATR-FTIR spectra, Raman Spectra, LFP Battery Data, more information can be found here 
+https://www.sciencedirect.com/science/article/abs/pii/S0098135422003489
+And here (open access): https://arxiv.org/abs/2205.08132
 
 The app was written in MATLAB_R2021a by using the MATLAB app designer toolbox.
 If you want an installable version that does not require a MATLAB license, please drop me a message. 
@@ -21,12 +23,24 @@ Have fun!<br />
 Joachim Schaeffer
 
 Please cite this Software as: <br />
-https://arxiv.org/abs/2205.08132 <br />
-@misc{schaeffer2022latent, <br />
-    title={Latent Variable Method Demonstrator - Software for Understanding Multivariate Data Analytics Algorithms}, <br />
-    author={Joachim Schaeffer and Richard Braatz}, <br />
-    year={2022}, <br />
-    eprint={2205.08132}, <br />
-    archivePrefix={arXiv}, <br />
-    primaryClass={stat.ML} <br />
+Joachim Schaeffer, Richard D. Braatz,
+Latent Variable Method Demonstrator — software for understanding multivariate data analytics algorithms,
+Computers & Chemical Engineering,
+Volume 167,
+2022,
+108014,
+ISSN 0098-1354,
+https://doi.org/10.1016/j.compchemeng.2022.108014.
+
+@article{schaeffer2022lavade,
+	author = {Joachim Schaeffer and Richard D. Braatz},
+	doi = {https://doi.org/10.1016/j.compchemeng.2022.108014},
+	issn = {0098-1354},
+	journal = {Computers & Chemical Engineering},
+	keywords = {Education, Teaching, Data analytics, Software, Machine learning},
+	pages = {108014},
+	title = {Latent Variable Method Demonstrator --- software for understanding multivariate data analytics algorithms},
+	url = {https://www.sciencedirect.com/science/article/pii/S0098135422003489},
+	volume = {167},
+	year = {2022}
 }
